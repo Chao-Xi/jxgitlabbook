@@ -10,6 +10,8 @@ plugins:
 
 nav:
   - 'Welcome': "index.md"
+  - 'Gitlab 简介':
+    - '第一节 Gitlab 基本介绍（CI/CD)' : 'chap1/1gitlab_cicd.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
