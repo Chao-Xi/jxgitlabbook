@@ -23,8 +23,8 @@ theme:
   feature:
     tabs: false
   palette:
-    primary: 'deep purple'
-    accent: 'deep purple'
+    primary: 'purple'
+    accent: 'purple'
   i18n:
     prev: 'Previous'
     next: 'Next'
