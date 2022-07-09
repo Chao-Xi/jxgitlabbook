@@ -1,4 +1,4 @@
-# **第一节 Gitlab 基本介绍（CI/CD)**
+# **1 Gitlab 基本介绍（CI/CD)**
 
 ![Alt Image Text](../images/chap1_1_1.png "Body image")
 

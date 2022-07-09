@@ -11,7 +11,10 @@ plugins:
 nav:
   - 'Welcome': "index.md"
   - 'Gitlab 简介':
-    - '第一节 Gitlab 基本介绍（CI/CD)' : 'chap1/1gitlab_cicd.md'
+    - '1 Gitlab 基本介绍（CI/CD)' : 'chap1/1gitlab_cicd.md'
+    - '2 Gitlab branch Strategy*': 'chap1/2gitlab_branch_strategy.md'
+    - '3 安装配置Gitlab*': 'chap1/3gitlab_install_quick.md'
+    - '4 在Kubernetes上安装Gitlab*': 'chap1/4gitlab_install_k8s.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
