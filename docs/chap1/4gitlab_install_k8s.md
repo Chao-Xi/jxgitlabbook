@@ -214,7 +214,7 @@ spec:
         - name: GITLAB_HOST
           value: "localhost"
         - name: GITLAB_PORT
-          value: "80"
+          value: "32220"   #这里极其重要
         - name: GITLAB_SSH_PORT
           value: "30022"
         - name: GITLAB_NOTIFY_ON_BROKEN_BUILDS
@@ -278,6 +278,7 @@ spec:
     - name: http
       port: 80
       targetPort: http
+      nodePort: 32220
     - name: ssh
       port: 22
       targetPort: ssh
