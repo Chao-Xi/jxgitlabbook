@@ -17,7 +17,7 @@ nav:
     - '4 在Kubernetes上安装Gitlab': 'chap1/4gitlab_install_k8s.md'
   - 'Gitlab Runner配置&安装':
     - '1 GitLab Runner 简介': 'chap2/1gitruner_intro.md'
-    - '2 GitLab Runner安装注册配置管理': 'chap2/1gitruner_intro.md'
+    - '2 GitLab Runner安装注册配置管理': 'chap2/2gitrunner_install.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
