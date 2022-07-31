@@ -18,6 +18,8 @@ nav:
   - 'Gitlab Runner配置&安装':
     - '1 GitLab Runner 简介': 'chap2/1gitruner_intro.md'
     - '2 GitLab Runner安装注册配置管理': 'chap2/2gitrunner_install.md'
+  - 'Pipeline 核心语法':
+    - 'GitLabCI系列之流水线语法': 'chap3/1gitlab_pip1.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
