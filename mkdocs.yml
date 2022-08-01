@@ -10,6 +10,8 @@ plugins:
 
 nav:
   - 'Welcome': "index.md"
+  - 'GitLab Fundamentals':
+    - '4 Gitlab Issues and Timelines': 'chap0/4issues.md'
   - 'Gitlab 简介':
     - '1 Gitlab 基本介绍（CI/CD)' : 'chap1/1gitlab_cicd.md'
     - '2 Gitlab branch Strategy': 'chap1/2gitlab_branch_strategy.md'
