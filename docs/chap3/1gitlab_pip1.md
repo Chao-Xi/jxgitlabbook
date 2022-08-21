@@ -1991,7 +1991,7 @@ gitlab-runner register \
   --non-interactive \
   --executor "docker" \
   --docker-image alpine:latest \
-  --url "http://192.168.1.200:30088/" \
+  --url "http://127.0.0.1:32220/" \
   --registration-token "JRzzw2j1Ji6aBjwvkxAv" \
   --description "docker-runner" \
   --tag-list "newdocker" \

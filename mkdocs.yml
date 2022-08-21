@@ -22,6 +22,11 @@ nav:
     - '2 GitLab Runner安装注册配置管理': 'chap2/2gitrunner_install.md'
   - 'Pipeline 核心语法':
     - 'GitLabCI系列之流水线语法': 'chap3/1gitlab_pip1.md'
+  - 'Gitlab工具链集成':
+    - '1 模板库设计Maven+NPM': 'chap4/1git_template.md'
+    - '2 Gitlab 工具链集成-代码质量平台集成': 'chap4/2git_sonar_pr.md'
+    - '3 工具链集成-制品库集成': 'chap4/3gitlab_artifact_docker.md'
+    - '4 Gitlab 自动化测试集成': 'chap4/4gitlab_jemeter.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
