@@ -27,6 +27,11 @@ nav:
     - '2 Gitlab 工具链集成-代码质量平台集成': 'chap4/2git_sonar_pr.md'
     - '3 工具链集成-制品库集成': 'chap4/3gitlab_artifact_docker.md'
     - '4 Gitlab 自动化测试集成': 'chap4/4gitlab_jemeter.md'
+  - 'Gitlab + Kubernetes集成':
+    - '1 基于K8S安装部署Runner' : 'chap5/1gitlab-runner-install.md'
+    - '2 Kubernetes 容器流水线': 'chap5/2gitlab_k8s.md'
+    - '3 Kubernetes 流水线构建消息通知': 'chap5/3gitlab_notification.md'
+    - '4 Gitlab + minio 配置使用分布式缓存': 'chap5/4gitlab_distri_storage.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
