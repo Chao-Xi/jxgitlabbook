@@ -39,6 +39,9 @@ nav:
   - '项目交付流水线':
     - '1 项目交付流水线优化后模板库配置': 'chap7/1deploy_pip.md'
     - '2 项目流水线(JAVA+NPM+安卓)': 'chap7/2deploy_projs.md'
+  - 'gitlab Certified CICD':
+    - 'GitLab Certified CI/CD Specialist Training': 'chap8/1cer_prep1.md'
+    - 'Anatomy of a Pipeline': 'chap8/2pip_prep1.md'
 
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
