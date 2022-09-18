@@ -1,4 +1,4 @@
-# **L3 Gitlab branch Settup Action**
+# **L3 Gitlab branch Setup Action**
 
 ## **1 Default branch**
 

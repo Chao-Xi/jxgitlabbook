@@ -1,4 +1,4 @@
-# **2 Gitflow Workflow**
+# **L2 Gitflow Workflow**
 
 > Reference:
 >
@@ -6,7 +6,7 @@
 
 Giflow is an alternative Git branching model that involves the use of feature branches and multiple primary branches.
 
-Gitflow can be used for projects that have a scheduled release cycle.  it assigns very specific roles to different branches and defines how and when they should interact. In addition to **feature** branches, it uses individual branches for preparing, maintaining, and recording releases. 
+Gitflow can be used for projects that have a scheduled release cycle.  it assigns very specific roles to different branches and defines how and when they should interact. In addition to **feature** branches, it uses individual branches for preparing, maintaining, and recording releases.
 
 ## How doest it work
 
@@ -23,7 +23,7 @@ git branch develop
 git push -u origin develop
 ```
 
-**Develop branch** will contain the complete history of the project, whereas **main will contain an abridged version**. 
+**Develop branch** will contain the complete history of the project, whereas **main will contain an abridged version**.
 
 Other developers should now clone the central repository(develop) and create a tracking branch for develop.
 
@@ -54,9 +54,9 @@ $ git branch
 
 ### Feature branches
 
-* Each new feature should reside in its own branch, which can be pushed to the central repository for backup/collaboration(Develop). 
-* Instead of branching off of main, feature branches use **develop as their parent branch**. 
-* When a feature is complete, it gets merged back into **develop**. 
+* Each new feature should reside in its own branch, which can be pushed to the central repository for backup/collaboration(Develop).
+* Instead of branching off of main, feature branches use **develop as their parent branch**.
+* When a feature is complete, it gets merged back into **develop**.
 * **Features should never interact directly with main**.
 
 ![Alt Image Text](../images/chap9_2_1.png "Body image")
@@ -86,6 +86,7 @@ When you’re done with the development work on the feature, **the next step is 
 git checkout develop
 git merge feature_branch
 ```
+
 * Using the git-flow extensions:
 
 ```
@@ -96,12 +97,12 @@ git flow feature finish feature_branch
 
 ![Alt Image Text](../images/chap9_2_2.png "Body image")
 
-* Once develop has acquired enough features for a release (or a predetermined release date is approaching), you **fork** a release branch off of **develop**. 
-* Creating this branch starts the next release cycle, **so no new features can be added** after this point—only bug fixes, **documentation generation, and other release-oriented tasks** should go in this branch. 
-* Once it's ready to ship, **the release branch gets merged into main and tagged with a version number**. 
+* Once develop has acquired enough features for a release (or a predetermined release date is approaching), you **fork** a release branch off of **develop**.
+* Creating this branch starts the next release cycle, **so no new features can be added** after this point—only bug fixes, **documentation generation, and other release-oriented tasks** should go in this branch.
+* Once it's ready to ship, **the release branch gets merged into main and tagged with a version number**.
 * In addition, it should be **merged back into develop**, which may have progressed since the release was initiated.
 
-Like feature branches, release branches are based on the develop branch. 
+Like feature branches, release branches are based on the develop branch.
 
 A new release branch can be created using the following methods.
 
@@ -119,8 +120,7 @@ $ git flow release start 0.1.0
 Switched to a new branch 'release/0.1.0''
 ```
 
-Once the release is ready to ship, it will get merged it into **main** and **develop**, then the **release branch will be deleted**. 
-
+Once the release is ready to ship, it will get merged it into **main** and **develop**, then the **release branch will be deleted**.
 
 It’s important to **merge back into develop** because critical updates may have been added to the release branch and **they need to be accessible to new features**.
 
@@ -139,11 +139,11 @@ git flow release finish '0.1.0'
 
 ![Alt Image Text](../images/chap9_2_3.png "Body image")
 
-Maintenance or “hotfix” branches are used to **quickly patch production releases**. 
+Maintenance or “hotfix” branches are used to **quickly patch production releases**.
 
-Hotfix branches are a lot like release branches and feature branches except **they're based on main instead of develop**. 
+Hotfix branches are a lot like release branches and feature branches except **they're based on main instead of develop**.
 
-This is the only branch that should **fork directly off of main**. 
+This is the only branch that should **fork directly off of main**.
 
 **As soon as the fix is complete, it should be merged into both main and develop** (or the current release branch), and **main should be tagged with an updated version number**.
 
@@ -205,12 +205,10 @@ git checkout main
 git merge hotfix_branch
 ```
 
-
 ## Summary
 
 * The workflow is great for a **release-based** software workflow.
 * Gitflow offers a dedicated channel for **hotfixes to production**.
-
 
 The overall flow of Gitflow is:
 
