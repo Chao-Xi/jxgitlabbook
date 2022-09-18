@@ -44,7 +44,12 @@ nav:
     - 'Anatomy of a Pipeline': 'chap8/2pip_prep1.md'
     - 'Gitlab Pipeline 复习': 'chap8/3Gitlab_pip.md'
     - 'Gitlab 认证考题': 'chap8/4Final_test.md'
-
+  - 'gitlab Project Management':
+    - 'L1 Gitlab branch Strategy': 'chap9/1Gitlab_branch.md'
+    - 'L2 Gitflow Workflow': 'chap9/2gitlab_workflow.md'
+    - 'L3 Gitlab branch Settup Action': 'chap9/3Gitlab_branch_action.md'
+    - 'L4 Agile Planning with GitLab': 'chap9/4gitlab_project.md'
+    - 'L5 Using Git Commit Message Templates': 'chap9/4gitlab_project.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
