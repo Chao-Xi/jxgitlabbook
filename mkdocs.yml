@@ -43,6 +43,7 @@ nav:
     - 'GitLab Certified CI/CD Specialist Training': 'chap8/1cer_prep1.md'
     - 'Anatomy of a Pipeline': 'chap8/2pip_prep1.md'
     - 'Gitlab Pipeline 复习': 'chap8/3Gitlab_pip.md'
+    - 'Gitlab 认证考题': 'chap8/4Final_test.md'
 
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
