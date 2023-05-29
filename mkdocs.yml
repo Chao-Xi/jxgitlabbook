@@ -28,6 +28,7 @@ nav:
     - '2 Gitlab 工具链集成-代码质量平台集成': 'chap4/2git_sonar_pr.md'
     - '3 工具链集成-制品库集成': 'chap4/3gitlab_artifact_docker.md'
     - '4 Gitlab 自动化测试集成': 'chap4/4gitlab_jemeter.md'
+    - '5 GitLabCI/CD Prom构建数据采集与监控' : 'chap4/5gitlba_mon.md'
   - 'Gitlab + Kubernetes集成':
     - '1 基于K8S安装部署Runner' : 'chap5/1gitlab-runner-install.md'
     - '2 Kubernetes 容器流水线': 'chap5/2gitlab_k8s.md'
