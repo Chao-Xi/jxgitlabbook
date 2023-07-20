@@ -301,7 +301,8 @@ code_analysis:
 
 **telmplate/pipeline.yml**
 
-```include:
+```
+include:
   - project: 'cidevops/cidevops-newci-service'
     ref: master
     file: 'jobs/build.yml'

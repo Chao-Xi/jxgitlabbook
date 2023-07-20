@@ -38,6 +38,7 @@ nav:
     - '1 流水线设计及提交': 'chap6/1pip_init.md'
     - '2 提交流水线设计': 'chap6/2pip_design.md'
     - '3 流水线运行': 'chap6/3pip_run.md'
+    - '4 如何将Secrets扫描加入到GitLab Pipeline': 'chap6/4pip_secret.md'
   - '项目交付流水线':
     - '1 项目交付流水线优化后模板库配置': 'chap7/1deploy_pip.md'
     - '2 项目流水线(JAVA+NPM+安卓)': 'chap7/2deploy_projs.md'
