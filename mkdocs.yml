@@ -23,6 +23,7 @@ nav:
     - '2 GitLab Runner安装注册配置管理': 'chap2/2gitrunner_install.md'
   - 'Pipeline 核心语法':
     - 'GitLabCI系列之流水线语法': 'chap3/1gitlab_pip1.md'
+    - '2 Gitlab CI 流水线构建优化 + Runner构建优化（持久化）': 'chap3/2gitlab_summary.md'
   - 'Gitlab工具链集成':
     - '1 模板库设计Maven+NPM': 'chap4/1git_template.md'
     - '2 Gitlab 工具链集成-代码质量平台集成': 'chap4/2git_sonar_pr.md'
