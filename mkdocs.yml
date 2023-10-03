@@ -54,6 +54,11 @@ nav:
     - 'L3 Gitlab branch Settup Action': 'chap9/3Gitlab_branch_action.md'
     - 'L4 Agile Planning with GitLab': 'chap9/4gitlab_project.md'
     - 'L5 Using Git Commit Message Templates': 'chap9/4gitlab_project.md'
+  - 'ArgoCD Project':
+    - '0 GitOps 常用工具盘点': 'argo1/0gitops.md'
+    - '1 使用 Argo CD 进行 GitOps 流水线改造': 'argo1/1argo2023_gitops.md'
+    - '2 使用 Argo Rollouts 实现应用渐进式发布': 'argo1/2Argo_Rollouts.md'
+    - '3 DevOps中的Argo CD — 灾难恢复': 'argo1/3argo_dr.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
