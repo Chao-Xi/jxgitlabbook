@@ -60,6 +60,7 @@ nav:
     - '2 使用 Argo Rollouts 实现应用渐进式发布': 'argo1/2Argo_Rollouts.md'
     - '3 DevOps中的Argo CD — 灾难恢复': 'argo1/3argo_dr.md'
     - '4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付': 'argo1/4argo_rollouts_ab.md'
+    - '5 GitOps 简介': 'argo1/6gitops.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
