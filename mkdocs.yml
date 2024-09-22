@@ -63,6 +63,7 @@ nav:
     - '5 GitOps 简介': 'argo1/6gitops.md'
   - 'Github Action':
     - '基于GitHubActions同步Docker镜像实践': 'chap10/1action_docker.md'
+    - 'GitHub Action - CI/CD Pipeline with Docker': 'chap10/2action_workflow.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
