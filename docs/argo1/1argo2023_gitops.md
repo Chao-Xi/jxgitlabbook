@@ -1,4 +1,4 @@
-# **1 使用 Argo CD 进行 GitOps 流水线改造**
+# **1 使用 Argo CD 进行 GitOps 流水线改造 2024**
 
 Argo CD 是一个为 Kubernetes 而生的，遵循声明式 GitOps 理念的持续部署工具。
 
@@ -195,6 +195,13 @@ spec:
       secretName: argocd-secret # do not change, this is provided by Argo CD
 ```
 
+```
+$ kubectl get ingress -n argocd 
+NAME                         CLASS   HOSTS                   ADDRESS   PORTS     AGE
+argocd-server-http-ingress   nginx   argocd.k8s.local                  80, 443   10h
+argocd-server-grpc-ingress   nginx   grpc.argocd.k8s.local             80, 443   10h
+```
+
 
 **然后我们需要在禁用 TLS 的情况下运行 APIServer**。
 
@@ -202,6 +209,15 @@ spec:
 **编辑 `argocd-server` 这个 Deployment 以将 `--insecure` 标志添加到 `argocd-server` 命令，或者简单地在 `argocd-cmd-params-cm` ConfigMap 中设置 `server.insecure: "true"` 即可。**
 
 创建完成后，我们就可以通过 `argocd.k8s.local` 来访问 Argo CD 服务了，不过需要注意我们这里配置的证书是自签名的，所以在第一次访问的时候会提示不安全，强制跳转即可。
+
+```
+grep -rnw "argocd" /etc/hosts
+/etc/hosts:23:192.168.194.11 argocd.k8s.local
+/etc/hosts:24:192.168.194.11 grpc.argocd.k8s.local
+```
+
+**`https://argocd.k8s.local:80/`**
+
 
 
 默认情况下 `admin` 帐号的初始密码是自动生成的，会以明文的形式存储在 Argo CD 安装的命名空间中名为 `argocd-initial-admin-secret` 的 `Secret` 对象下的 `password` 字段下，我们可以用下面的命令来获取：
@@ -217,43 +233,45 @@ $ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.p
 同样我们也可以通过 ArgoCD CLI 命令行工具进行登录：
 
 ```
-$ argocd login grpc.argocd.k8s.local
+$ argocd login grpc.argocd.k8s.local:80
 WARNING: server certificate had error: tls: failed to verify certificate: x509: certificate signed by unknown authority. Proceed insecurely (y/n)? y
 Username: admin
-Password:
+Password: 
 'admin:login' logged in successfully
-Context 'grpc.argocd.k8s.local' updated
+Context 'grpc.argocd.k8s.local:80' updated
 ```
 
-需要注意的是这里登录的地址为 gRPC 暴露的服务地址。
+**需要注意的是这里登录的地址为 gRPC 暴露的服务地址。**
 
 CLI 登录成功后，可以使用如下所示命令更改密码：
 
 ```
 $ argocd account update-password
-*** Enter current password:
-*** Enter new password:
-*** Confirm new password:
+*** Enter current password: 
+*** Enter new password:       admin123  
+*** Confirm new password:     admin123
 Password updated
 Context 'argocd.k8s.local' updated
+
+
 $ argocd version
-argocd: v2.8.4+c279299
-  BuildDate: 2023-09-13T19:43:37Z
-  GitCommit: c27929928104dc37b937764baf65f38b78930e59
+argocd: v2.12.3+6b9cd82
+  BuildDate: 2024-08-27T15:48:18Z
+  GitCommit: 6b9cd828c6e9807398869ad5ac44efd2c28422d6
   GitTreeState: clean
-  GoVersion: go1.20.7
+  GoVersion: go1.23.0
   Compiler: gc
-  Platform: darwin/arm64
-argocd-server: v2.8.4+c279299
-  BuildDate: 2023-09-13T19:12:09Z
-  GitCommit: c27929928104dc37b937764baf65f38b78930e59
+  Platform: darwin/amd64
+argocd-server: v2.12.3+6b9cd82
+  BuildDate: 2024-08-27T11:57:48Z
+  GitCommit: 6b9cd828c6e9807398869ad5ac44efd2c28422d6
   GitTreeState: clean
-  GoVersion: go1.20.6
+  GoVersion: go1.22.4
   Compiler: gc
   Platform: linux/amd64
-  Kustomize Version: v5.1.0 2023-06-19T16:58:18Z
-  Helm Version: v3.12.1+gf32a527
-  Kubectl Version: v0.24.2
+  Kustomize Version: v5.4.2 2024-05-22T15:19:38Z
+  Helm Version: v3.15.2+g1a500d5
+  Kubectl Version: v0.29.6
   Jsonnet Version: v0.20.0
 ```
 
@@ -265,19 +283,35 @@ argocd-server: v2.8.4+c279299
 
 ```
 $ kubectl config get-contexts -o name
-kubernetes-admin@kubernetes
-testcluster
+docker-desktop
+orbstack
 ```
 
 **从列表中选择一个上下文名称并将其提供给 `argocd cluster add CONTEXTNAME`**，比如对于 orbstack 上下文，运行：
 
 ```
-$ argocd cluster add testcluster
+$ argocd cluster list
+SERVER                          NAME        VERSION  STATUS   MESSAGE                                                  PROJECT
+https://kubernetes.default.svc  in-cluster           Unknown  Cluster has no applications and is not being monitored.  
+
+$ argocd cluster add orbstack --in-cluster -y --upsert
+
+
+INFO[0000] ServiceAccount "argocd-manager" already exists in namespace "kube-system" 
+INFO[0000] ClusterRole "argocd-manager-role" updated    
+INFO[0000] ClusterRoleBinding "argocd-manager-role-binding" updated 
+Cluster 'https://kubernetes.default.svc' added
 ```
+
+![Alt Image Text](../images/argo1_24_1.png "Body image")
 
 ## 创建应用
 
+
 Git 仓库 [https://github.com/argoproj/argocd-example-apps.git](https://github.com/argoproj/argocd-example-apps.git) 是一个包含留言簿应用程序的示例库，我们可以用该应用来演示 Argo CD 的工作原理
+
+
+Or [https://gitee.com/cnych/argocd-example-apps](https://gitee.com/cnych/argocd-example-apps)
 
 ### 通过 CLI 创建应用
 
@@ -322,9 +356,12 @@ $ argocd app create guestbook --repo https://github.com/argoproj/argocd-example-
 application 'guestbook' created
 ```
 
+![Alt Image Text](../images/argo1_24_2.png "Body image")
+
+
 ### 通过 UI 创建应用
 
-除了可以通过 CLI 工具来创建应用，我们也可以通过 UI 界面来创建，定位到 argocd.k8s.local 页面，登录后，点击 +New App 新建应用按钮，如下图：
+除了可以通过 CLI 工具来创建应用，我们也可以通过 UI 界面来创建，定位到 argocd.k8s.local 页面，登录后，点击 `+New App` 新建应用按钮，如下图：
 
 ![Alt Image Text](../images/ag1_1_3.png "Body image")
 
@@ -419,18 +456,248 @@ $ argocd app sync argocd/guestbook
 
 ```
 $ kubectl get pods
-NAME                                 READY   STATUS      RESTARTS       AGE
-guestbook-ui-6c96fb4bdc-bdwh9        1/1     Running     0              3m3s
+NAME                            READY   STATUS    RESTARTS   AGE
+guestbook-ui-6b7f6d9874-fsgsj   1/1     Running   0          17m
 
-➜  ~ kubectl get svc
-NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)                      AGE
-guestbook-ui         ClusterIP      10.100.170.117   <none>         80/TCP                       3m16s
-kubernetes           ClusterIP      10.96.0.1        <none>         443/TCP 
+$ kubectl get svc
+NAME           TYPE        CLUSTER-IP        EXTERNAL-IP   PORT(S)   AGE
+kubernetes     ClusterIP   192.168.194.129   <none>        443/TCP   12h
+guestbook-ui   ClusterIP   192.168.194.195   <none>        80/TCP    23m
 ```
 
 和我们从 Git 仓库中同步 guestbook 目录下面的资源状态也是同步的，证明同步成功了。
 
-## 流水线改造
+## Helm 项目
+
+如果有多个团队，每个团队都要维护大量的应用，就需要用到 Argo CD 的另一个概念：项目（Project）。Argo CD 中的项目（Project）可以用来对 Application 进行分组，不同的团队使用不同的项目，这样就实现了多租户环境。项目还支持更细粒度的访问权限控制：
+
+* 限制部署内容（受信任的 Git 仓库）；
+* 限制目标部署环境（目标集群和 namespace）；
+* 限制部署的资源类型（例如 RBAC、CRD、DaemonSets、NetworkPolicy 等）；
+* 定义项目角色，为 Application 提供 RBAC（例如 OIDC group 或者 JWT 令牌绑定）。
+
+比如我们这里创建一个名为 demo 的项目，将该应用创建到该项目下，只需创建一个如下所示的 AppProject 对象即可：
+
+```
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  # 项目名
+  name: demo
+  namespace: argocd
+spec:
+  # 目标
+  destinations:
+    # 此项目的服务允许部署的 namespace，这里为全部
+    - namespace: "*"
+      # 此项目允许部署的集群，这里为默认集群，即为Argo CD部署的当前集群
+      server: https://kubernetes.default.svc
+  # 允许的数据源
+  sourceRepos:
+    - https://github.com/argoproj/argocd-example-apps
+```
+
+该对象中有几个核心的属性：
+
+* sourceRepos：项目中的应用程序可以从中获取清单的仓库引用
+* destinations：项目中的应用可以部署到的集群和命名空间
+* roles：项目内资源访问定义的角色
+
+直接创建该对象即可：
+
+```
+$  kubectl get appproject -n argocd
+NAME      AGE
+default   12h
+demo      20s
+```
+
+更多配置信息可以前往文档 https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/ 查看，项目创建完成后，在该项目下创建一个 Application，代表环境中部署的应用程序实例。
+
+```
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitops-demo
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: "https://kubernetes.default.svc"
+  project: demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    path: helm-guestbook # 从 Helm 存储库创建应用程序时，chart 必须指定 path
+    repoURL: "https://github.com/argoproj/argocd-example-apps.git"
+    targetRevision: HEAD
+    helm:
+      parameters:
+        - name: replicaCount
+          value: "2"
+      valueFiles:
+        - values.yaml
+```
+
+```
+$ kubectl apply -f gitops.yaml 
+application.argoproj.io/gitops-demo created
+```
+
+**这里我们定义了一个名为 gitop-demo 的应用，应用源来自于 helm 路径，使用的是 `values.yaml ` 文件，此外还可以通过 `source.helm.parameters` 来配置参数**。
+
+同步策略可以选择使用自动的方式，该策略下面还有两个属性可以配置：
+
+* **`PRUNE RESOURCES`：开启后 Git Repo 中删除资源会自动在环境中删除对应的资源**。
+
+![Alt Image Text](../images/argo1_24_3.png "Body image")
+
+* **SELF HEAL：自动痊愈，强制以 Git Repo 状态为准，手动在环境中修改不会生效**
+
+![Alt Image Text](../images/argo1_24_4.png "Body image")
+
+正常创建后这个应用就会自动部署了，根据我们配置会生成两个副本。
+
+![Alt Image Text](../images/argo1_24_5.png "Body image")
+
+
+**由于 Argo CD 默认并不是实时去监测 Config Repo 的变化的，如果要更快的检测到变化我们可以使用 Git Webhook 的方式**。
+
+默认情况下 Argo CD 每三分钟轮询一次 Git 存储库，以检测清单的更改。为了消除轮询延迟，可以将 API 服务器配置为接收 Webhook 事件。Argo CD 支持来自 GitHub、GitLab、Bitbucket、Bitbucket Server 和 Gogs 的 Git webhook 通知。
+
+**同样方式我们可以在 `k8s-devops-demo-config` 仓库下面创建一个 `Webhook`，Git 提供程序中配置的有效负载 URL 应使用 Argo CD 实例的 `/api/webhook` 端点（例如 https://argocd.example.com/api/webhook）**。
+
+
+![Alt Image Text](../images/ag1_1_14.png "Body image")
+
+```
+$ kubectl edit secret argocd-secret -n argocd
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-secret
+  namespace: argocd
+type: Opaque
+data:
+...
+
+stringData:
+  # github webhook secret
+  webhook.github.secret: shhhh! it's a GitHub secret
+
+  # gitlab webhook secret
+  webhook.gitlab.secret: shhhh! it's a GitLab secret
+
+  # bitbucket webhook secret
+  webhook.bitbucket.uuid: your-bitbucket-uuid
+
+  # bitbucket server webhook secret
+  webhook.bitbucketserver.secret: shhhh! it's a Bitbucket server secret
+
+  # gogs server webhook secret
+  webhook.gogs.secret: shhhh! it's a gogs server secret
+```
+
+可以直接使用 `stringData` 来配置 secret，这样就不用去手动编码了。
+
+因为 GitOps 的核心是 Git，所以我们一定要将部署到集群中的资源清单文件全都托管到 Git 仓库中，这样才能实现 GitOps 的自动同步部署。
+
+上面我们是在 CI 流水线中去修改 Git 仓库中的资源清单文件，其实我们也可以通过其他方式去修改，比如 Argo CD 也提供了一个新的工具 Argo CD Image Updater。
+
+## ApplicationSet
+
+ApplicationSet 用于简化多集群应用编排，它可以基于单一应用编排并根据用户的编排内容自动生成一个或多个 Application。
+
+比如现在我们创建一个如下所示的 ApplicationSet 资源对象
+
+```
+ applicationset.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook
+spec:
+  goTemplate: true # 使用 go template 模板
+  goTemplateOptions: ["missingkey=error"] # 当模板中缺少键时，抛出错误
+  generators: # 生成器，用于生成参数
+    - list: # 列表生成器
+        elements: # 元素
+          - cluster: dev
+            url: https://1.2.3.4
+          - cluster: staging
+            url: https://9.8.7.6
+          - cluster: prod
+            url: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: "{{.cluster}}-guestbook"
+    spec:
+      project: demo
+      source:
+        repoURL: https://gitee.com/cnych/argocd-example-apps
+        targetRevision: HEAD
+        path: helm-guestbook
+        helm:
+          valueFiles:
+            - "{{.cluster}}.yaml"
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+      destination:
+        server: "{{.url}}"
+        namespace: guestbook
+```
+
+在上面的资源对象中，我们定义了一个 ApplicationSet 资源对象，其中使用了模板和生成器：
+
+* `goTemplate: true`：表示使用 `go template` 的模板
+* `goTemplateOptions: ["missingkey=error"]`：当模板中缺少键时，抛出错误
+* `generators`：生成器，用于生成参数，ApplicationSet 控制器当前支持多种生成器：
+
+	* 包含 JSON 值的文件将被解析并转换为模板参数。
+	* Git 存储库中的各个目录路径也可以用作参数值。
+	* 列表生成器：根据集群名称/URL 值的固定列表生成参数，如上例所示。
+	* 集群生成器：集群生成器不是基于 clusters 的字面列表（与列表生成器一样），而是根据 Argo CD 中定义的集群自动生成集群参数。
+	* Git 生成器：Git 生成器根据生成器资源中定义的 Git 存储库中包含的文件或文件夹生成参数。
+	* 矩阵生成器：矩阵生成器结合了其他两个生成器生成的参数。
+
+* template：模板，用于生成 Application 资源对象
+
+这里我们通过列表生成器定义了多个生成器元素，里面包含 cluster 和 url 两个参数，ApplicationSet 控制器会根据这些参数生成多个 Application 资源对象，每个 Application 资源对象都会部署到对应的集群和命名空间中，每个 Application 资源就是通过这些参数将模板中的内容渲染生成。
+
+论使用哪个生成器，生成器生成的参数都会替换为 ApplicationSet 资源的 template: 部分中的 `{{parameter name}} `值。
+
+我们这里列表生成器定义了 cluster 和 url 参数，然后将它们分别替换为模板的 `{{cluster}}` 和 `{{url}} `值。
+
+我们可以直接使用 argocd appset 命令来创建：
+
+```
+$ argocd appset create applicationset.yaml
+ApplicationSet 'guestbook' created
+$ argocd appset list
+NAME              PROJECT  SYNCPOLICY  CONDITIONS                                                                                                                                                                                                                                     REPO                                         PATH            TARGET
+argocd/guestbook  demo     nil         [{ParametersGenerated Successfully generated parameters for all Applications 2024-09-08 11:48:52 +0800 CST True ParametersGenerated} {ResourcesUpToDate ApplicationSet up to date 2024-09-08 11:48:52 +0800 CST True ApplicationSetUpToDate}]  https://gitee.com/cnych/argocd-example-apps  helm-guestbook  HEAD
+```
+
+建完成后可以通过 `argocd appset list` 查看 ApplicationSet 资源对象的状态，从上面输出可以看到 `ApplicationSet` 资源对象的状态为 `ParametersGenerated`，表示参数已经生成成功，也就是已经将 `ApplicationSet `资源对象中的内容渲染生成多个 `Application` 资源对象了。
+
+查看下 Application 资源对象的状态即可
+
+```
+$ argocd argocd app list
+NAME                      CLUSTER                         NAMESPACE  PROJECT  STATUS     HEALTH   SYNCPOLICY  CONDITIONS           REPO                                             PATH            TARGET
+argocd/dev-guestbook      https://1.2.3.4                 guestbook  demo     Unknown    Unknown  Manual      InvalidSpecError(2)  https://gitee.com/cnych/argocd-example-apps      helm-guestbook  HEAD
+argocd/prod-guestbook     https://kubernetes.default.svc  guestbook  demo     OutOfSync  Missing  Manual      <none>               https://gitee.com/cnych/argocd-example-apps      helm-guestbook  HEAD
+argocd/staging-guestbook  https://9.8.7.6                 guestbook  demo     Unknown  
+```
+
+可以看到现在渲染了 3 个 Application 资源对象，和我们前面在 ApplicationSet 资源对象中定义的集群和 URL 是一一对应的，当然我们也可以在 Dashboard 界面中查看：
+
+![Alt Image Text](../images/argo1_24_6.png "Body image")
+
+## 流水线改造 2023
 
 前面我们通过 Jenkins Pipeline 已经成功的将应用部署到了集群中了，但是我们使用的是传统的主动 push 方式，接下来我们需要将这个流程改造成为一个 GitOps 的流水线，这样我们就可以通过 Git 来管理应用的部署了。
 
