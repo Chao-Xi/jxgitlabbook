@@ -67,6 +67,7 @@ nav:
   - 'Github Action':
     - '基于GitHubActions同步Docker镜像实践': 'chap10/1action_docker.md'
     - 'GitHub Action - CI/CD Pipeline with Docker': 'chap10/2action_workflow.md'
+    - 'GitHub Actions basic learning': 'chap10/3action_events.md'
 
 repo_url: https://github.com/Chao-Xi/jxgitlabbook.git
 repo_name: "jxgitlabbook"
