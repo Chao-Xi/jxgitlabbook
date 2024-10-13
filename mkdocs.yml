@@ -63,7 +63,6 @@ nav:
     - '5 GitOps 简介': 'argo1/6gitops.md'
     - '6 K8S YAML 资源清单管理方案': 'argo1/7k8s_yaml_cicd.md'
     - '7 ArgoCD Image Updater': 'argo1/8cd_image_updater.md'
-    
   - 'Github Action':
     - '基于GitHubActions同步Docker镜像实践': 'chap10/1action_docker.md'
     - 'GitHub Action - CI/CD Pipeline with Docker': 'chap10/2action_workflow.md'
