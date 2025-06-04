@@ -1,0 +1,4017 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Jacob's Gitlab Tutorial Book">
+      
+      
+        <meta name="author" content="Jacob Xi">
+      
+      
+        <link rel="canonical" href="https://chao-xi.github.io/jxgitlabbook/chap10/3action_events/">
+      
+      
+        <link rel="prev" href="../2action_workflow/">
+      
+      
+      
+      <link rel="icon" href="../../images/logo.jpeg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>GitHub Actions basic learning - Jacob GitLab Book</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#github-actions-basic-learning" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Jacob GitLab Book" class="md-header__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jacob GitLab Book
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GitHub Actions basic learning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Jacob GitLab Book" class="md-nav__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    Jacob GitLab Book
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Welcome
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GitLab Fundamentals
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GitLab Fundamentals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/1proj/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project and Repositoires
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/4issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Issues and Timelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 简介
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab 简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/1gitlab_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 Gitlab 基本介绍（CI/CD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/2gitlab_branch_strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/3gitlab_install_quick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 安装配置Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/4gitlab_install_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 在Kubernetes上安装Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Runner配置&安装
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab Runner配置&安装
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/1gitruner_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 GitLab Runner 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/2gitrunner_install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 GitLab Runner安装注册配置管理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pipeline 核心语法
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Pipeline 核心语法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/1gitlab_pip1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLabCI系列之流水线语法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/2gitlab_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab CI 流水线构建优化 + Runner构建优化（持久化）
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/3gitlab_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 配置复杂的 Gitlab CI/CD Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab工具链集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab工具链集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/1git_template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 模板库设计Maven+NPM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/2git_sonar_pr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab 工具链集成-代码质量平台集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/3gitlab_artifact_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 工具链集成-制品库集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/4gitlab_jemeter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab 自动化测试集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/5gitlba_mon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitLabCI/CD Prom构建数据采集与监控
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab + Kubernetes集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab + Kubernetes集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/1gitlab-runner-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 基于K8S安装部署Runner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/2gitlab_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Kubernetes 容器流水线
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/3gitlab_notification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 Kubernetes 流水线构建消息通知
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/4gitlab_distri_storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab + minio 配置使用分布式缓存
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab流水线最佳实践
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab流水线最佳实践
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/1pip_init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 流水线设计及提交
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/2pip_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 提交流水线设计
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/3pip_run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 流水线运行
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/4pip_secret/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 如何将Secrets扫描加入到GitLab Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    项目交付流水线
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            项目交付流水线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/1deploy_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 项目交付流水线优化后模板库配置
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/2deploy_projs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 项目流水线(JAVA+NPM+安卓)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Certified CICD
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Certified CICD
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/1cer_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLab Certified CI/CD Specialist Training
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/2pip_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anatomy of a Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/3Gitlab_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline 复习
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/4Final_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 认证考题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Project Management
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Project Management
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/1Gitlab_branch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L1 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/2gitlab_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L2 Gitflow Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/3Gitlab_branch_action/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L3 Gitlab branch Settup Action
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ArgoCD Project
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            ArgoCD Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/0gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0 GitOps 常用工具盘点
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/1argo2023_gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 使用 Argo CD 进行 GitOps 流水线改造- 2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/2Argo_Rollouts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 使用 Argo Rollouts 实现应用渐进式发布
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/3argo_dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 DevOps中的Argo CD — 灾难恢复
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/4argo_rollouts_ab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/6gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitOps 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/7k8s_yaml_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6 K8S YAML 资源清单管理方案
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/8cd_image_updater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7 ArgoCD Image Updater
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Github Action
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Github Action
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1action_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    基于GitHubActions同步Docker镜像实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2action_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Action - CI/CD Pipeline with Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    GitHub Actions basic learning
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Actions basic learning
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-triggering-workflows-with-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Triggering Workflows with Events
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1 Triggering Workflows with Events">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-triggers-workflow-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push Triggers Workflow Run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggering-on-a-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggering on a Schedule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-triggers-with-workflow_dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Triggers with workflow_dispatch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-on-every-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      build on Every Path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-gh-cli-to-view-runs-and-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using the gh CLI to View Runs and Workflows
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-using-steps-on-runners" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 Using Steps on Runners
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 Using Steps on Runners">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2-1-jobs-have-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-1 Jobs Have Steps
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-2-a-new-workflow-for-the-upper-build-and-adding-actionssetup-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-2 A New Workflow for the Upper Build and Adding actions/setup-go
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-3-understanding-actionscheckout" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-3 Understanding actions/checkout
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-4-set-working-directory-on-the-multiline-run-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-4 Set Working Directory on the Multiline Run Step
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-5-go-version-file-and-cached-vs-downloaded-go-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-5 go-version-file and Cached vs. Downloaded Go Version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-6-fix-caching-of-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-6 Fix Caching of Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-7-running-on-macos-latest" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-7 Running on macos-latest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-8-running-on-macos-latest" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-8 Running on macos-latest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-9-registering-a-self-hosted-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-9 Registering a Self-hosted Runner
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-injecting-secrets-and-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 Injecting Secrets and Environment Variables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 Injecting Secrets and Environment Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-1-injecting-the-gh_token-environment-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      3-1 Injecting the GH_TOKEN Environment Variable
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2-commenting-on-issues-with-actionsgithub-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      3-2 Commenting on Issues with actions/github-scripts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-3-adding-a-secret-for-an-openai_api_key" class="md-nav__link">
+    <span class="md-ellipsis">
+      3-3 Adding a Secret for an OPENAI_API_KEY
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-publishing-artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 Publishing Artifacts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 Publishing Artifacts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-1-actionsupload-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-1 actions/upload-artifact
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-2-matrix-strategy-for-runner-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-2 Matrix Strategy for Runner OS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-2-matrix-strategy-for-runner-os_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-2 Matrix Strategy for Runner OS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-3-using-a-script-to-cross-compile" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-3 Using a Script to Cross Compile
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-4-creating-a-github-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-4 Creating a GitHub Release
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-status-badges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Status Badges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-status-badges_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Status Badges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-docker-registry-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check docker registry variables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push-the-image-to-ghcrio-to-create-a-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push the Image to ghcr.io to Create a Package
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push-the-image-to-ghcrio-to-create-a-package_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push the Image to ghcr.io to Create a Package
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-deployment-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 Deployment Pipelines
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5 Deployment Pipelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-1-building-an-image-for-the-dotnet-web-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-1 Building an Image for the dotnet Web API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-workflow-to-push-an-image-to-docker-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-2 Workflow to Push an Image to Docker Hub
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-3-production-environment-requires-approval-to-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-3 Production Environment Requires Approval to Deploy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-4-azurewebapps-deploy-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-4 azure/webapps-deploy Action
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-5-the-entire-cd-pipeline-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-5 The Entire CD Pipeline Works!
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-6-triggering-a-new-workflow-on-deployment-created" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-6 Triggering a New Workflow on Deployment Created
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-environment-variables-with-github_env-environment-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing Environment Variables with GITHUB_ENV Environment File
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-outputs-between-dependent-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing Outputs between Dependent Jobs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-job-container-to-provide-the-mysql-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a Job Container to Provide the MySQL CLI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connecting-to-a-mysql-service-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connecting to a MySQL Service Container!
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-a-codeql-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up a CodeQL Workflow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alerts-from-the-security-and-quality-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alerts from the security-and-quality Suite
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-triggering-workflows-with-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Triggering Workflows with Events
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1 Triggering Workflows with Events">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-triggers-workflow-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push Triggers Workflow Run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggering-on-a-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggering on a Schedule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-triggers-with-workflow_dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Triggers with workflow_dispatch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-on-every-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      build on Every Path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-gh-cli-to-view-runs-and-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using the gh CLI to View Runs and Workflows
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-using-steps-on-runners" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 Using Steps on Runners
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 Using Steps on Runners">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2-1-jobs-have-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-1 Jobs Have Steps
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-2-a-new-workflow-for-the-upper-build-and-adding-actionssetup-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-2 A New Workflow for the Upper Build and Adding actions/setup-go
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-3-understanding-actionscheckout" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-3 Understanding actions/checkout
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-4-set-working-directory-on-the-multiline-run-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-4 Set Working Directory on the Multiline Run Step
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-5-go-version-file-and-cached-vs-downloaded-go-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-5 go-version-file and Cached vs. Downloaded Go Version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-6-fix-caching-of-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-6 Fix Caching of Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-7-running-on-macos-latest" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-7 Running on macos-latest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-8-running-on-macos-latest" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-8 Running on macos-latest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-9-registering-a-self-hosted-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-9 Registering a Self-hosted Runner
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-injecting-secrets-and-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 Injecting Secrets and Environment Variables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 Injecting Secrets and Environment Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-1-injecting-the-gh_token-environment-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      3-1 Injecting the GH_TOKEN Environment Variable
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2-commenting-on-issues-with-actionsgithub-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      3-2 Commenting on Issues with actions/github-scripts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-3-adding-a-secret-for-an-openai_api_key" class="md-nav__link">
+    <span class="md-ellipsis">
+      3-3 Adding a Secret for an OPENAI_API_KEY
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-publishing-artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 Publishing Artifacts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 Publishing Artifacts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-1-actionsupload-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-1 actions/upload-artifact
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-2-matrix-strategy-for-runner-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-2 Matrix Strategy for Runner OS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-2-matrix-strategy-for-runner-os_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-2 Matrix Strategy for Runner OS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-3-using-a-script-to-cross-compile" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-3 Using a Script to Cross Compile
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-4-creating-a-github-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      4-4 Creating a GitHub Release
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-status-badges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Status Badges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-status-badges_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Status Badges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-docker-registry-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check docker registry variables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push-the-image-to-ghcrio-to-create-a-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push the Image to ghcr.io to Create a Package
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push-the-image-to-ghcrio-to-create-a-package_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push the Image to ghcr.io to Create a Package
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-deployment-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 Deployment Pipelines
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5 Deployment Pipelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-1-building-an-image-for-the-dotnet-web-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-1 Building an Image for the dotnet Web API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-workflow-to-push-an-image-to-docker-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-2 Workflow to Push an Image to Docker Hub
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-3-production-environment-requires-approval-to-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-3 Production Environment Requires Approval to Deploy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-4-azurewebapps-deploy-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-4 azure/webapps-deploy Action
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-5-the-entire-cd-pipeline-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-5 The Entire CD Pipeline Works!
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-6-triggering-a-new-workflow-on-deployment-created" class="md-nav__link">
+    <span class="md-ellipsis">
+      5-6 Triggering a New Workflow on Deployment Created
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-environment-variables-with-github_env-environment-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing Environment Variables with GITHUB_ENV Environment File
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-outputs-between-dependent-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing Outputs between Dependent Jobs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-job-container-to-provide-the-mysql-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a Job Container to Provide the MySQL CLI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connecting-to-a-mysql-service-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connecting to a MySQL Service Container!
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-a-codeql-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up a CodeQL Workflow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alerts-from-the-security-and-quality-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alerts from the security-and-quality Suite
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="github-actions-basic-learning">GitHub Actions basic learning</h1>
+<p><strong>Workflow Templates</strong></p>
+<p><strong>GitHub provided</strong></p>
+<ul>
+<li>Recommended based on repo code</li>
+<li>Deployment (CD)</li>
+<li>Continuous Integration (CI)</li>
+<li>Security (code scanning)</li>
+</ul>
+<p><strong>Create for your organization</strong></p>
+<ul>
+<li>Promote consistency and best practice</li>
+</ul>
+<p><a href="https://github.com/Chao-Xi/action-project">https://github.com/Chao-Xi/action-project</a></p>
+<h2 id="1-triggering-workflows-with-events">1 Triggering Workflows with Events</h2>
+<pre><code># This is a basic workflow to help you get started with Actions
+
+name: test
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the &quot;main&quot; branch
+  push:
+  # schedule:
+  # - cron: &quot;* * * * *&quot; 
+  #   branches: [ &quot;main&quot; ]
+  # pull_request:
+  #   branches: [ &quot;main&quot; ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: # manual
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called &quot;build&quot;
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: sleep 5
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_1.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_2.png" title="Body image" /></p>
+<h3 id="push-triggers-workflow-run">Push Triggers Workflow Run</h3>
+<pre><code>on:
+  # Triggers the workflow on push or pull request events but only for the &quot;main&quot; branch
+  push:
+</code></pre>
+<h3 id="triggering-on-a-schedule">Triggering on a Schedule</h3>
+<pre><code>schedule:
+- cron: &quot;* * * * *&quot; 
+</code></pre>
+<p>https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows</p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_3.png" title="Body image" /></p>
+<h3 id="manual-triggers-with-workflow_dispatch">Manual Triggers with workflow_dispatch</h3>
+<pre><code> # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: # manual
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_4.png" title="Body image" /></p>
+<h3 id="build-on-every-path">build on Every Path</h3>
+<p><a href="https://github.com/Chao-Xi/sampleapp-action/blob/main/.github/workflows/build.yaml">https://github.com/Chao-Xi/sampleapp-action/blob/main/.github/workflows/build.yaml</a></p>
+<pre><code>on:
+  push:
+    paths:
+      - &quot;.github/workflows/build.yaml&quot;
+      - &quot;.&quot;
+</code></pre>
+<h3 id="using-the-gh-cli-to-view-runs-and-workflows">Using the gh CLI to View Runs and Workflows</h3>
+<pre><code>gh auth status
+
+gh auth login
+
+gh workflow list
+
+gh run list
+
+gh run view 9474112383
+
+gh workflow list -repo gût4/course-gh-actions
+</code></pre>
+<h2 id="2-using-steps-on-runners">2 Using Steps on Runners</h2>
+<p><a href="https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/upper-build.yml">https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/upper-build.yml</a></p>
+<h3 id="2-1-jobs-have-steps">2-1 Jobs Have Steps</h3>
+<pre><code>name: upper-build
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-build.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: go version
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_5.png" title="Body image" /></p>
+<h3 id="2-2-a-new-workflow-for-the-upper-build-and-adding-actionssetup-go">2-2 A New Workflow for the Upper Build and Adding actions/setup-go</h3>
+<p><a href="https://github.com/actions/setup-go">https://github.com/actions/setup-go</a></p>
+<pre><code>....
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: go version
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - run: go version
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_6.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_7.png" title="Body image" /></p>
+<h3 id="2-3-understanding-actionscheckout">2-3 Understanding actions/checkout</h3>
+<p><a href="https://github.com/actions/checkout">https://github.com/actions/checkout</a></p>
+<pre><code>...
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pwd &amp;&amp; ls -al
+      - uses: actions/checkout@v4
+      - run: pwd &amp;&amp; ls -al
+      - run: go version
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - run: go version
+</code></pre>
+<p><strong>Set Working Directory on the Multiline Run Step</strong></p>
+<h3 id="2-4-set-working-directory-on-the-multiline-run-step">2-4 Set Working Directory on the Multiline Run Step</h3>
+<pre><code>jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pwd &amp;&amp; ls -al
+      - uses: actions/checkout@v4
+      - run: pwd &amp;&amp; ls -al
+      - run: go version
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - run: go version
+      - run: |
+          ls
+          go build
+          ls
+          go test
+          ./upper foo the bar
+        working-directory: upper
+        name: build and test
+</code></pre>
+<p><strong>working-directory: upper</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_8.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_9.png" title="Body image" /></p>
+<h3 id="2-5-go-version-file-and-cached-vs-downloaded-go-version">2-5 go-version-file and Cached vs. Downloaded Go Version</h3>
+<pre><code> - uses: actions/setup-go@v5
+   with:
+    # go-version: '1.22'
+     go-version-file: ./upper/go.mod
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_10.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_11.png" title="Body image" /></p>
+<p><strong>Fix Caching of Dependencies</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_12.png" title="Body image" /></p>
+<pre><code>...
+steps:
+  - run: pwd &amp;&amp; ls -al
+  - uses: actions/checkout@v4
+  - run: pwd &amp;&amp; ls -al
+  - run: go version
+  - uses: actions/setup-go@v5
+    with:
+      # go-version: '1.22'
+      go-version-file: ./upper/go.mod
+      cache-dependency-path: ./upper/go.sum
+...
+</code></pre>
+<h3 id="2-6-fix-caching-of-dependencies">2-6 Fix Caching of Dependencies</h3>
+<pre><code> with:
+  # go-version: '1.22'
+   $    go-version-file: ./upper/go.mod
+          cache-dependency-path: ./upper/go.sum
+      - run: go mod download
+        working-directory: upper
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_13.png" title="Body image" /></p>
+<h3 id="2-7-running-on-macos-latest">2-7 Running on macos-latest</h3>
+<pre><code>- uses: actions/setup-go@v5
+    with:
+      # go-version: '1.22'
+      go-version-file: ./upper/go.mod
+      cache-dependency-path: ./upper/go.sum
+</code></pre>
+<h3 id="2-8-running-on-macos-latest">2-8 Running on macos-latest</h3>
+<p>Macos-latest</p>
+<pre><code>..
+jobs:
+  build:
+    # runs-on: ubuntu-latest
+    runs-on: macos-latest
+    steps:
+      - run: pwd &amp;&amp; ls -al
+      - uses: actions/checkout@v4
+      - run: pwd &amp;&amp; ls -al
+...
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_14.png" title="Body image" /></p>
+<h3 id="2-9-registering-a-self-hosted-runner">2-9 Registering a Self-hosted Runner</h3>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_15.png" title="Body image" /></p>
+<pre><code>$ curl -o actions-runner-osx-x64-2.320.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.320.0/actions-runner-osx-x64-2.320.0.tar.gz
+
+$ echo &quot;11e610adc1c3721a806d2a439d03d143cceeda7a63e794bfe75b45da55e308df  actions-runner-osx-x64-2.320.0.tar.gz&quot; | shasum -a 256 -c
+
+mkdir actions-runner &amp;&amp; cd actions-runner
+
+$ tar xzf ./actions-runner-osx-x64-2.320.0.tar.gz
+$ ./config.sh --url https://github.com/Chao-Xi/action-sample --token ....
+
+
+--------------------------------------------------------------------------------
+|        ____ _ _   _   _       _          _        _   _                      |
+|       / ___(_) |_| | | |_   _| |__      / \   ___| |_(_) ___  _ __  ___      |
+|      | |  _| | __| |_| | | | | '_ \    / _ \ / __| __| |/ _ \| '_ \/ __|     |
+|      | |_| | | |_|  _  | |_| | |_) |  / ___ \ (__| |_| | (_) | | | \__ \     |
+|       \____|_|\__|_| |_|\__,_|_.__/  /_/   \_\___|\__|_|\___/|_| |_|___/     |
+|                                                                              |
+|                       Self-hosted runner registration                        |
+|                                                                              |
+--------------------------------------------------------------------------------
+
+# Authentication
+
+
+√ Connected to GitHub
+
+# Runner Registration
+
+Enter the name of the runner group to add this runner to: [press Enter for Default] 
+
+Enter the name of runner: [press Enter for C02S710EG8WM] jacob1
+
+This runner will have the following labels: 'self-hosted', 'macOS', 'X64' 
+Enter any additional labels (ex. label-1,label-2): [press Enter to skip] 
+
+√ Runner successfully added
+√ Runner connection is good
+
+# Runner settings
+
+Enter name of work folder: [press Enter for _work] 
+
+√ Settings Saved.
+
+</code></pre>
+<pre><code>...
+jobs:
+  build:
+    # runs-on: ubuntu-latest
+    # runs-on: macos-latest
+    runs-on: self-hosted
+...
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11275759756">https://github.com/Chao-Xi/action-sample/actions/runs/11275759756</a></p>
+<pre><code>$ ./run.sh
+
+√ Connected to GitHub
+
+Current runner version: '2.320.0'
+2024-10-10 14:07:53Z: Listening for Jobs
+2024-10-10 14:08:32Z: Running job: build
+2024-10-10 14:17:54Z: Job build completed with result: Canceled
+^CExiting...
+Runner listener exit with 0 return code, stop the service, no retry needed.
+Exiting runner...
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_16.png" title="Body image" /></p>
+<h2 id="3-injecting-secrets-and-environment-variables">3 Injecting Secrets and Environment Variables</h2>
+<p><strong>gh.yml</strong></p>
+<pre><code>name: gh
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/gh.yaml&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  cli:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: env
+      - run: gh --version
+      - run: gh auth status
+      - run: gh repo list
+      - run: gh issue list
+      - run: gh workflow list
+      - run: gh api /repos/:owner/:repo/actions/workflows
+</code></pre>
+<h3 id="3-1-injecting-the-gh_token-environment-variable">3-1 Injecting the <code>GH_TOKEN</code> Environment Variable</h3>
+<pre><code>env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_20.png" title="Body image" /></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11294465133/job/31414962742">https://github.com/Chao-Xi/action-sample/actions/runs/11294465133/job/31414962742</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_17.png" title="Body image" /></p>
+<pre><code>steps:
+  - uses: actions/checkout@v4
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_18.png" title="Body image" />
+<a href="https://github.com/Chao-Xi/action-sample/issues">
+https://github.com/Chao-Xi/action-sample/issues</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_19.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_21.png" title="Body image" /></p>
+<pre><code>Run gh api /repos/:owner/:repo/actions/workflows
+{&quot;total_count&quot;:3,&quot;workflows&quot;:
+[{&quot;id&quot;:121669156,&quot;node_id&quot;:&quot;W_kwDOM9zvsc4HQIYk&quot;,&quot;name&quot;:&quot;api-build&quot;,&quot;path&quot;:&quot;.github/workflows/api-build.yml&quot;,&quot;state&quot;:&quot;active&quot;,&quot;created_at&quot;:&quot;2024-10-09T13:33:30.000Z&quot;,&quot;updated_at&quot;:&quot;2024-10-09T13:33:30.000Z&quot;,&quot;url&quot;:&quot;https://api.github.com/repos/Chao-Xi/action-sample/actions/workflows/121669156&quot;,&quot;html_url&quot;:&quot;https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/api-build.yml&quot;,&quot;badge_url&quot;:&quot;https://github.com/Chao-Xi/action-sample/workflows/api-build/badge.svg&quot;},
+{&quot;id&quot;:121669168,&quot;node_id&quot;:&quot;W_kwDOM9zvsc4HQIYw&quot;,&quot;name&quot;:&quot;upper-build&quot;,&quot;path&quot;:&quot;.github/workflows/upper-build.yml&quot;,&quot;state&quot;:&quot;active&quot;,&quot;created_at&quot;:&quot;2024-10-09T13:33:30.000Z&quot;,&quot;updated_at&quot;:&quot;2024-10-09T13:33:30.000Z&quot;,&quot;url&quot;:&quot;https://api.github.com/repos/Chao-Xi/action-sample/actions/workflows/121669168&quot;,&quot;html_url&quot;:&quot;https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/upper-build.yml&quot;,&quot;badge_url&quot;:&quot;https://github.com/Chao-Xi/action-sample/workflows/upper-build/badge.svg&quot;},
+{&quot;id&quot;:122078780,&quot;node_id&quot;:&quot;W_kwDOM9zvsc4HRsY8&quot;,&quot;name&quot;:&quot;gh&quot;,&quot;path&quot;:&quot;.github/workflows/gh.yaml&quot;,&quot;state&quot;:&quot;active&quot;,&quot;created_at&quot;:&quot;2024-10-11T14:42:47.000Z&quot;,&quot;updated_at&quot;:&quot;2024-10-11T14:42:47.000Z&quot;,&quot;url&quot;:&quot;https://api.github.com/repos/Chao-Xi/action-sample/actions/workflows/122078780&quot;,&quot;html_url&quot;:&quot;https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/gh.yaml&quot;,&quot;badge_url&quot;:&quot;https://github.com/Chao-Xi/action-sample/workflows/gh/badge.svg&quot;}]}
+</code></pre>
+<h3 id="3-2-commenting-on-issues-with-actionsgithub-scripts">3-2 Commenting on Issues with actions/github-scripts</h3>
+<p><strong>write-thanks.yml</strong></p>
+<pre><code>name: thanks
+
+on:
+  issues:
+    types: opened
+  workflow_dispatch: # manual
+
+jobs:
+  thanks:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/github-script@v7
+        id: issue_script
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue_number = context.issue.number || 2;
+            console.log(`issue_number: ${issue_number}`);
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // lookup issue info
+            const issue = await github.rest.issues.get({
+              repo, owner, issue_number
+            });
+            console.log(`issue: ${issue}`);
+
+            // create comment thanking contributor
+            const comment = await github.rest.issues.createComment({
+              repo, owner, issue_number,
+              body: &quot;Thanks for your contribution!&quot;
+            });
+            console.log(`comment id: ${comment.data.id}`);
+            console.log(comment.data);
+
+            // auto label
+            github.rest.issues.addLabels({
+              repo, owner, issue_number,
+              labels: ['todo-review']
+            })
+
+            // make comment id available to subsequent steps
+            return comment.data.id;
+
+      - run: echo 'comment id=${{ steps.issue_script.outputs.result }}'
+</code></pre>
+<p><strong>actions/github-script@v7</strong></p>
+<p><a href="https://github.com/actions/github-script">https://github.com/actions/github-script</a></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/workflows/write-thanks.yml">https://github.com/Chao-Xi/action-sample/actions/workflows/write-thanks.yml</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_22.png" title="Body image" /></p>
+<p><strong>Set Token Permissions to Write to Issues</strong></p>
+<pre><code>permissions:
+      issues: write
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_24.png" title="Body image" /></p>
+<pre><code>with:
+   github-token: ${{ secrets.GITHUB_TOKEN }}
+</code></pre>
+<h3 id="3-3-adding-a-secret-for-an-openai_api_key">3-3 <strong>Adding a Secret for an <code>OPENAI_API_KEY</code></strong></h3>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_23.png" title="Body image" /></p>
+<pre><code>name: butler
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  chat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ca-dp/code-butler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # OPENAI_API_URL: ${{ vars.OPENAI_API_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          cmd: chat
+          comment_body: ${{ github.event.comment.body }}
+</code></pre>
+<h2 id="4-publishing-artifacts">4 Publishing Artifacts</h2>
+<h3 id="4-1-actionsupload-artifact">4-1 actions/upload-artifact</h3>
+<pre><code>name: upper-capture
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-capture.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  capture:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: upper
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+          cache-dependency-path: ./upper/go.sum
+      - run: ls
+      - run: go build
+      - run: ls
+      - run: go test -v
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./upper/upper*
+          name: build
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11302253576/job/31437834265">https://github.com/Chao-Xi/action-sample/actions/runs/11302253576/job/31437834265</a></p>
+<pre><code>- uses: actions/upload-artifact@v4
+        with:
+          path: ./upper/upper*
+          name: build
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11302382442/job/31438123876">https://github.com/Chao-Xi/action-sample/actions/runs/11302382442/job/31438123876</a></p>
+<h3 id="4-2-matrix-strategy-for-runner-os">4-2 Matrix Strategy for Runner OS</h3>
+<p><strong>upper-capture.yml</strong></p>
+<pre><code>name: upper-capture
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-capture.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  capture:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-12 ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: upper
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+          cache-dependency-path: ./upper/go.sum
+      - run: ls
+      - run: go build
+      - run: ls
+      - run: go test -v
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./upper/upper*
+          name: &quot;build-${{ matrix.os }}&quot;
+
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_25.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_26.png" title="Body image" /></p>
+<h3 id="4-2-matrix-strategy-for-runner-os_1">4-2 Matrix Strategy for Runner OS</h3>
+<pre><code>name: upper-capture
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-capture.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  capture:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-12 ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: upper
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+          cache-dependency-path: ./upper/go.sum
+      - run: ls
+      - run: go build
+      - run: ls
+      - run: go test -v
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./upper/upper*
+          name: &quot;build-${{ matrix.os }}&quot;
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_27.png" title="Body image" /></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11302490544">https://github.com/Chao-Xi/action-sample/actions/runs/11302490544</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_28.png" title="Body image" /></p>
+<h3 id="4-3-using-a-script-to-cross-compile">4-3 Using a Script to Cross Compile</h3>
+<p><strong><code>build.xplat.sh</code></strong></p>
+<pre><code>#!/bin/bash
+set -e
+
+echo &quot;::group::Testing...&quot;
+go test -v
+echo &quot;::endgroup::&quot;
+
+APP_NAME=upper
+OUTPUT_DIR=bin
+
+mkdir -p $OUTPUT_DIR
+
+platforms=(&quot;windows/amd64&quot; &quot;linux/amd64&quot; &quot;darwin/amd64&quot;)
+for platform in &quot;${platforms[@]}&quot;
+do
+    platform_split=(${platform//\// })
+    GOOS=${platform_split[0]}
+    GOARCH=${platform_split[1]}
+    output_name=$OUTPUT_DIR/$APP_NAME'-'$GOOS'-'$GOARCH
+    if [ $GOOS = &quot;windows&quot; ]; then
+        output_name+='.exe'
+    fi
+
+    echo &quot;::group::Building $output_name...&quot;
+    go clean # remove prior build (triggers more logging too)
+    env GOOS=$GOOS GOARCH=$GOARCH go build -x -o $output_name .
+    echo &quot;::endgroup::&quot;
+
+done
+
+echo &quot;::group::tree...&quot;
+tree
+echo &quot;::endgroup::&quot;
+</code></pre>
+<p><strong><code>upper-capture-script.yml</code></strong></p>
+<pre><code>name: upper-cross
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-capture-script.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  cross:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: upper
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+          cache-dependency-path: ./upper/go.sum
+      - run: ./build.xplat.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./upper/bin/upper*
+          name: build
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11302653121/job/31438797061">https://github.com/Chao-Xi/action-sample/actions/runs/11302653121/job/31438797061</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_29.png" title="Body image" /></p>
+<h3 id="4-4-creating-a-github-release">4-4 Creating a GitHub Release</h3>
+<p><strong><code>upper-capture-tag.yml</code></strong></p>
+<pre><code>name: upper-cross
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-capture-tag.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  cross:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: upper
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+          cache-dependency-path: ./upper/go.sum
+      - run: ./build.xplat.sh
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ./upper/bin/upper*
+          body: &quot;Binaries for the upper (go) command line tool!!!&quot;
+          tag_name: ${{ github.ref_name }}
+        if: startsWith(github.ref_name, 'refs/tags/')
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_30.png" title="Body image" /></p>
+<pre><code>cross:
+    permissions:
+      contents: write
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11302862521/job/31439286571">https://github.com/Chao-Xi/action-sample/actions/runs/11302862521/job/31439286571</a></p>
+<pre><code>Run softprops/action-gh-release@v2
+👩‍🏭 Creating new GitHub release for tag main...
+⬆️ Uploading upper-windows-amd64.exe...
+⬆️ Uploading upper-linux-amd64...
+⬆️ Uploading upper-darwin-amd64...
+🎉 Release ready at https://github.com/Chao-Xi/action-sample/releases/tag/main
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_31.png" title="Body image" /></p>
+<p><strong>Release on Tags Only</strong></p>
+<p><strong>add new tag</strong></p>
+<p><strong><code>if: startsWith(github.ref_name, 'refs/tags/')</code></strong></p>
+<pre><code>$ git tag v1.1.0
+
+
+$ git tag
+v1.0.0
+v1.1.0
+v4.0.1
+
+$ git push --tags
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11303044702/job/31439694800">https://github.com/Chao-Xi/action-sample/actions/runs/11303044702/job/31439694800</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_32.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_33.png" title="Body image" /></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/releases">https://github.com/Chao-Xi/action-sample/releases</a></p>
+<h3 id="workflow-status-badges">Workflow Status Badges</h3>
+<p><strong>docker build #1</strong></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11303941783">https://github.com/Chao-Xi/action-sample/actions/runs/11303941783</a></p>
+<pre><code>name: upper-images
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-images.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+permissions:
+  packages: write
+  contents: read # not needed in public repos
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker version
+      - run: docker image build -t upper .
+        working-directory: ./upper
+      - name: test it
+        run: docker container run upper hello wes
+</code></pre>
+<pre><code>Run docker container run upper hello wes
+HELLO WES
+</code></pre>
+<h3 id="workflow-status-badges_1">Workflow Status Badges</h3>
+<pre><code>[![upper-cross](https://github.com/Chao-Xi/action-sample/actions/workflows/upper-capture-tag.yml/badge.svg)](https://github.com/Chao-Xi/action-sample/actions/workflows/upper-capture-tag.yml)
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/workflows/upper-capture-tag.yml"><img alt="upper-cross" src="https://github.com/Chao-Xi/action-sample/actions/workflows/upper-capture-tag.yml/badge.svg" /></a></p>
+<h3 id="check-docker-registry-variables">Check docker registry variables</h3>
+<pre><code>name: Print environment variables
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print
+        run: env | sort
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11304271867/job/31442445265">https://github.com/Chao-Xi/action-sample/actions/runs/11304271867/job/31442445265</a></p>
+<pre><code>...
+GITHUB_REPOSITORY=Chao-Xi/action-sample
+GITHUB_REPOSITORY_ID=870117297
+GITHUB_REPOSITORY_OWNER=Chao-Xi
+...
+</code></pre>
+<h3 id="push-the-image-to-ghcrio-to-create-a-package">Push the Image to ghcr.io to Create a Package</h3>
+<pre><code>name: upper-images
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/upper-images.yml&quot;
+      - &quot;upper/**&quot;
+  workflow_dispatch: # manual
+
+permissions:
+  packages: write
+  contents: read # not needed in public repos
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker version
+      - run: docker image build -t upper .
+        working-directory: ./upper
+      - name: test it
+        run: docker container run upper hello wes
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }} # Chao-Xi
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: docker tag upper ghcr.io/chao-xi/upper:latest
+      - run: docker tag upper ghcr.io/chao-xi/upper:${{ github.ref_name }}
+      - run: docker push ghcr.io/chao-xi/upper:latest
+      - run: docker push ghcr.io/chao-xi/upper:${{ github.ref_name }}
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11304324230/job/31442561439">https://github.com/Chao-Xi/action-sample/actions/runs/11304324230/job/31442561439</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_34.png" title="Body image" /></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11304324230">https://github.com/Chao-Xi/action-sample/actions/runs/11304324230</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_35.png" title="Body image" /></p>
+<pre><code>$ docker run --rm -i -t ghcr.io/chao-xi/
+upper:latest test test test
+Unable to find image 'ghcr.io/chao-xi/upper:latest' locally
+latest: Pulling from chao-xi/upper
+43c4264eed91: Already exists 
+46d22ddfd777: Pull complete 
+Digest: sha256:248970198c46065b0d81ba636c0e2f399e81c44db11133d4d5d1eabfb6a8ece2
+Status: Downloaded newer image for ghcr.io/chao-xi/upper:latest
+TEST TEST TEST
+</code></pre>
+<h3 id="push-the-image-to-ghcrio-to-create-a-package_1">Push the Image to ghcr.io to Create a Package</h3>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/workflows/upper-capture-tag.yml">https://github.com/Chao-Xi/action-sample/actions/workflows/upper-capture-tag.yml</a></p>
+<pre><code>$ git push tag v1.1.1
+
+$ git push --tags 
+
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To github.com:Chao-Xi/action-sample.git
+ * [new tag]         v1.1.1 -&gt; v1.1.1
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_36.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_37.png" title="Body image" /></p>
+<ul>
+<li>https://github.com/Chao-Xi/action-sample/actions/runs/11304435072</li>
+<li>https://github.com/Chao-Xi/action-sample/actions/workflows/upper-images.yml</li>
+</ul>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_38.png" title="Body image" /></p>
+<h2 id="5-deployment-pipelines">5 Deployment Pipelines</h2>
+<h3 id="5-1-building-an-image-for-the-dotnet-web-api">5-1 Building an Image for the dotnet Web API</h3>
+<p><a href="https://github.com/Chao-Xi/action-sample/tree/main/api">https://github.com/Chao-Xi/action-sample/tree/main/api</a></p>
+<p><strong>compose.yaml</strong></p>
+<pre><code>services:
+  api:
+    image: nyjxi/actions-web:latest
+    build:
+      context: .
+      target: runner
+      platforms:
+        - linux/amd64
+    ports:
+      - 8080:80
+</code></pre>
+<p><strong>build-only.sh</strong></p>
+<pre><code>#!/bin/bash
+
+my_app_version=$(git describe --tag)
+
+docker compose build --pull --build-arg &quot;MY_APP_VERSION=$my_app_version&quot;
+</code></pre>
+<p><strong>build-push.sh</strong></p>
+<pre><code>#!/bin/bash
+
+./build-only.sh
+docker compose push
+</code></pre>
+<h3 id="5-2-workflow-to-push-an-image-to-docker-hub">5-2 Workflow to Push an Image to Docker Hub</h3>
+<p><strong>cd.yaml</strong></p>
+<pre><code>name: cd
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/cd.yml&quot;
+      - &quot;api/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # all commits, so we can generate version off of tags/commit sha...
+      - uses: docker/setup-buildx-action@v3
+      - run: docker buildx ls
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+      - run: ./build-push.sh # can reuse local build scripts for CI/CD
+        working-directory: api
+        name: push to docker hub
+</code></pre>
+<pre><code>username: ${{ secrets.DOCKERHUB_USERNAME }}
+password: ${{ secrets.DOCKERHUB_PASS }}
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_39.png" title="Body image" /></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11310904227">https://github.com/Chao-Xi/action-sample/actions/runs/11310904227</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_40.png" title="Body image" /></p>
+<h3 id="5-3-production-environment-requires-approval-to-deploy">5-3 Production Environment Requires Approval to Deploy</h3>
+<pre><code>deploy:
+  runs-on: ubuntu-latest
+  environment:
+    name: production
+</code></pre>
+<p>Add environment: production</p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_41.png" title="Body image" /></p>
+<p>Add environment: secret</p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_42.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_43.png" title="Body image" /></p>
+<pre><code>...
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.webapp-url }}
+    # needs: build
+    steps:
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.PROD }}
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_44.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_45.png" title="Body image" /></p>
+<h3 id="5-4-azurewebapps-deploy-action">5-4 azure/webapps-deploy Action</h3>
+<pre><code>...
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.webapp-url }}
+    # needs: build
+    steps:
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.PROD }}
+      - uses: azure/webapps-deploy@v3
+        id: deploy
+        with:
+          app-name: gh-actions-web-api
+          images: weshigbee/actions-web:latest
+          resource-group-name: gh-actions
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_46.png" title="Body image" /></p>
+<h3 id="5-5-the-entire-cd-pipeline-works">5-5 The Entire CD Pipeline Works!</h3>
+<pre><code>name: cd
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/cd.yml&quot;
+      - &quot;api/**&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # all commits, so we can generate version off of tags/commit sha...
+      - uses: docker/setup-buildx-action@v3
+      - run: docker buildx ls
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+      - run: ./build-push.sh # can reuse local build scripts for CI/CD
+        working-directory: api
+        name: push to docker hub
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.webapp-url }}
+    needs: build
+    steps:
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.PROD }}
+      - uses: azure/webapps-deploy@v3
+        id: deploy
+        with:
+          app-name: gh-actions-web-api
+          images: weshigbee/actions-web:latest
+          resource-group-name: gh-actions
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_47.png" title="Body image" /></p>
+<h3 id="5-6-triggering-a-new-workflow-on-deployment-created">5-6 Triggering a New Workflow on Deployment Created</h3>
+<p><strong><code>cd-on-deploy.yml</code></strong></p>
+<pre><code>name: cd-on-deploy
+
+on:
+  deployment: # trigger when a deployment is created
+
+jobs:
+  alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo &quot;sending slack alert to get deploy approved...&quot;
+      - run: echo &quot;${{ toJson(github.event) }}&quot;
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11311547429/job/31457914181">https://github.com/Chao-Xi/action-sample/actions/runs/11311547429/job/31457914181</a></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11311544551">https://github.com/Chao-Xi/action-sample/actions/runs/11311544551</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_48.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_49.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_50.png" title="Body image" /></p>
+<h3 id="passing-environment-variables-with-github_env-environment-file">Passing Environment Variables with <code>GITHUB_ENV</code> Environment File</h3>
+<p><code>integration-tests.yml</code></p>
+<pre><code>name: integration-tests
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/integration-tests.yml&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  generate:
+    outputs:
+      RANDOM_PASSWORD: ${{ env.RANDOM_PASSWORD }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: env | sort
+      - run: echo &quot;RANDOM_PASSWORD=$(LC_ALL=C tr -dc A-Za-z0-9 &lt;/dev/urandom | head -c 12)&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;
+      - run: echo &quot;$RANDOM_PASSWORD / ${{ env.RANDOM_PASSWORD }}&quot;
+      - run: env | sort
+      # - run: mysql ... -p $RANDOM_PASSWORD
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11311660841">https://github.com/Chao-Xi/action-sample/actions/runs/11311660841</a></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11311660841/job/31458165238">https://github.com/Chao-Xi/action-sample/actions/runs/11311660841/job/31458165238</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_51.png" title="Body image" /></p>
+<h3 id="passing-outputs-between-dependent-jobs">Passing Outputs between Dependent Jobs</h3>
+<p><strong><code>integration-tests.yml</code></strong></p>
+<pre><code>name: integration-tests
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/integration-tests.yml&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  generate:
+    outputs:
+      RANDOM_PASSWORD: ${{ env.RANDOM_PASSWORD }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: env | sort
+      - run: echo &quot;RANDOM_PASSWORD=$(LC_ALL=C tr -dc A-Za-z0-9 &lt;/dev/urandom | head -c 12)&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;
+      - run: echo &quot;$RANDOM_PASSWORD / ${{ env.RANDOM_PASSWORD }}&quot;
+      - run: env | sort
+      # - run: mysql ... -p $RANDOM_PASSWORD
+  testing:
+    runs-on: ubuntu-latest
+    needs: generate
+    steps:
+       - run: echo &quot;${{ needs.generate.output.RANDOM_PASSWORD }}&quot;
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_52.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_53.png" title="Body image" /></p>
+<h3 id="using-a-job-container-to-provide-the-mysql-cli">Using a Job Container to Provide the MySQL CLI</h3>
+<pre><code>name: integration-tests
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/integration-tests.yml&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  generate:
+    outputs:
+      RANDOM_PASSWORD: ${{ env.RANDOM_PASSWORD }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: env | sort
+      - run: echo &quot;RANDOM_PASSWORD=$(LC_ALL=C tr -dc A-Za-z0-9 &lt;/dev/urandom | head -c 12)&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;
+      - run: echo &quot;$RANDOM_PASSWORD / ${{ env.RANDOM_PASSWORD }}&quot;
+      - run: env | sort
+      # - run: mysql ... -p $RANDOM_PASSWORD
+  testing:
+    runs-on: ubuntu-latest
+    needs: generate
+    container:
+      image: mysql:8.4
+    steps:
+       - run: echo &quot;${{ needs.generate.outputs.RANDOM_PASSWORD }}&quot;
+       - run: mysql --version
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11311814333">https://github.com/Chao-Xi/action-sample/actions/runs/11311814333</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_54.png" title="Body image" /></p>
+<h3 id="connecting-to-a-mysql-service-container">Connecting to a MySQL Service Container!</h3>
+<pre><code>name: integration-tests
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/integration-tests.yml&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  generate:
+    outputs:
+      RANDOM_PASSWORD: ${{ env.RANDOM_PASSWORD }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: env | sort
+      - run: echo &quot;RANDOM_PASSWORD=$(LC_ALL=C tr -dc A-Za-z0-9 &lt;/dev/urandom | head -c 12)&quot; &gt;&gt; &quot;$GITHUB_ENV&quot;
+      - run: echo &quot;$RANDOM_PASSWORD / ${{ env.RANDOM_PASSWORD }}&quot;
+      - run: env | sort
+      # - run: mysql ... -p $RANDOM_PASSWORD
+  testing:
+    runs-on: ubuntu-latest
+    needs: generate
+    container:
+      image: mysql:8.4
+    services:
+      mysqlserver:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ needs.generate.outputs.RANDOM_PASSWORD }}
+          MYSQL_DATABASE: foothebar
+        options: --health-cmd=&quot;mysqladmin ping&quot; --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - run: echo &quot;${{ needs.generate.outputs.RANDOM_PASSWORD }}&quot;
+      - run: mysql --version
+      - run: mysql -h mysqlserver -u root -p${{ needs.generate.outputs.RANDOM_PASSWORD }} -e &quot;SHOW DATABASES;&quot;
+      - run: echo &quot;job.services= ${{ toJson(job.services)}}&quot;
+      - run: echo &quot;job.container= ${{ toJson(job.container)}}&quot;
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_55.png" title="Body image" /></p>
+<h3 id="setting-up-a-codeql-workflow">Setting up a CodeQL Workflow</h3>
+<p><a href="https://github.com/Chao-Xi/action-sample/settings/security_analysis">https://github.com/Chao-Xi/action-sample/settings/security_analysis</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_56.png" title="Body image" /></p>
+<p><a href="https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/codeql.yml">https://github.com/Chao-Xi/action-sample/blob/main/.github/workflows/codeql.yml</a></p>
+<pre><code>name: &quot;CodeQL Advanced&quot;
+
+on:
+  push:
+    paths:
+      - &quot;.github/workflows/codeql.yml&quot;
+      - &quot;api/*&quot;
+  workflow_dispatch: # manual
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    # Runner size impacts CodeQL analysis time. To learn more, please see:
+    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
+    #   - https://gh.io/supported-runners-and-hardware-resources
+    #   - https://gh.io/using-larger-runners (GitHub.com only)
+    # Consider using larger runners or machines with greater resources for possible analysis time improvements.
+    runs-on: ${{ (matrix.language == 'swift' &amp;&amp; 'macos-latest') || 'ubuntu-latest' }}
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # required to fetch internal or private CodeQL packs
+      packages: read
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - language: csharp
+          build-mode: autobuild
+        - language: go
+          build-mode: autobuild
+        # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
+        # Use `c-cpp` to analyze code written in C, C++ or both
+        # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
+        # Use 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
+        # To learn more about changing the languages that are analyzed or customizing the build mode for your analysis,
+        # see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning.
+        # If you are analyzing a compiled language, you can modify the 'build-mode' for that language to customize how
+        # your codebase is analyzed, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/codeql-code-scanning-for-compiled-languages
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+        queries: &quot;+security-and-quality&quot;
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with &quot;+&quot; to use these queries and those in the config file.
+
+        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # queries: security-extended,security-and-quality
+
+    # If the analyze step fails for one of the languages you are analyzing with
+    # &quot;We were unable to automatically build your code&quot;, modify the matrix above
+    # to set the build mode to &quot;manual&quot; for that language. Then modify this step
+    # to build your code.
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+    - if: matrix.build-mode == 'manual'
+      shell: bash
+      run: |
+        echo 'If you are using a &quot;manual&quot; build mode for one or more of the' \
+          'languages you are analyzing, replace this with the commands to build' \
+          'your code, for example:'
+        echo '  make bootstrap'
+        echo '  make release'
+        exit 1
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: &quot;/language:${{matrix.language}}&quot;
+</code></pre>
+<p><a href="https://github.com/Chao-Xi/action-sample/actions/runs/11314646150">https://github.com/Chao-Xi/action-sample/actions/runs/11314646150</a></p>
+<p><img alt="Alt Image Text" src="../../images/chap10_3_57.png" title="Body image" /></p>
+<h3 id="alerts-from-the-security-and-quality-suite">Alerts from the security-and-quality Suite</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-9999 Jacob Xi
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

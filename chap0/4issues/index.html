@@ -1,0 +1,2513 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Jacob's Gitlab Tutorial Book">
+      
+      
+        <meta name="author" content="Jacob Xi">
+      
+      
+        <link rel="canonical" href="https://chao-xi.github.io/jxgitlabbook/chap0/4issues/">
+      
+      
+        <link rel="prev" href="../1proj/">
+      
+      
+        <link rel="next" href="../../chap1/1gitlab_cicd/">
+      
+      
+      <link rel="icon" href="../../images/logo.jpeg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Gitlab Issues and Timelines - Jacob GitLab Book</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gitlab-issues-and-timelines" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Jacob GitLab Book" class="md-header__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jacob GitLab Book
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gitlab Issues and Timelines
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Jacob GitLab Book" class="md-nav__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    Jacob GitLab Book
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Welcome
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GitLab Fundamentals
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GitLab Fundamentals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1proj/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project and Repositoires
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Issues and Timelines
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Issues and Timelines
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-gitlab-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 GitLab Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 GitLab Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2-1-features-of-gitlab-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-1 Features of GitLab Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-2-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-2 Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-gitlab-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 GitLab Labels
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 GitLab Labels">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-issue-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 Issue Board
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 Issue Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#purpose-of-gitlab-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose of GitLab Labels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-inviting-members-to-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 Inviting Members to Project
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-working-on-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 Working on Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6 Working on Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-milestones" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 Milestones
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7 Milestones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-milestones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Milestones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-service-desk" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 Service Desk
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8 Service Desk">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-desk" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Desk
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 简介
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab 简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/1gitlab_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 Gitlab 基本介绍（CI/CD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/2gitlab_branch_strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/3gitlab_install_quick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 安装配置Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/4gitlab_install_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 在Kubernetes上安装Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Runner配置&安装
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab Runner配置&安装
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/1gitruner_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 GitLab Runner 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/2gitrunner_install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 GitLab Runner安装注册配置管理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pipeline 核心语法
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Pipeline 核心语法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/1gitlab_pip1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLabCI系列之流水线语法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/2gitlab_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab CI 流水线构建优化 + Runner构建优化（持久化）
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/3gitlab_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 配置复杂的 Gitlab CI/CD Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab工具链集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab工具链集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/1git_template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 模板库设计Maven+NPM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/2git_sonar_pr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab 工具链集成-代码质量平台集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/3gitlab_artifact_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 工具链集成-制品库集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/4gitlab_jemeter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab 自动化测试集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/5gitlba_mon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitLabCI/CD Prom构建数据采集与监控
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab + Kubernetes集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab + Kubernetes集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/1gitlab-runner-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 基于K8S安装部署Runner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/2gitlab_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Kubernetes 容器流水线
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/3gitlab_notification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 Kubernetes 流水线构建消息通知
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/4gitlab_distri_storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab + minio 配置使用分布式缓存
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab流水线最佳实践
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab流水线最佳实践
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/1pip_init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 流水线设计及提交
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/2pip_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 提交流水线设计
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/3pip_run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 流水线运行
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/4pip_secret/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 如何将Secrets扫描加入到GitLab Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    项目交付流水线
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            项目交付流水线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/1deploy_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 项目交付流水线优化后模板库配置
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/2deploy_projs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 项目流水线(JAVA+NPM+安卓)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Certified CICD
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Certified CICD
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/1cer_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLab Certified CI/CD Specialist Training
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/2pip_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anatomy of a Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/3Gitlab_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline 复习
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/4Final_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 认证考题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Project Management
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Project Management
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/1Gitlab_branch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L1 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/2gitlab_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L2 Gitflow Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/3Gitlab_branch_action/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L3 Gitlab branch Settup Action
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ArgoCD Project
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            ArgoCD Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/0gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0 GitOps 常用工具盘点
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/1argo2023_gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 使用 Argo CD 进行 GitOps 流水线改造- 2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/2Argo_Rollouts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 使用 Argo Rollouts 实现应用渐进式发布
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/3argo_dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 DevOps中的Argo CD — 灾难恢复
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/4argo_rollouts_ab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/6gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitOps 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/7k8s_yaml_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6 K8S YAML 资源清单管理方案
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/8cd_image_updater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7 ArgoCD Image Updater
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Github Action
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Github Action
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/1action_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    基于GitHubActions同步Docker镜像实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/2action_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Action - CI/CD Pipeline with Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/3action_events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Actions basic learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-gitlab-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 GitLab Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 GitLab Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2-1-features-of-gitlab-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-1 Features of GitLab Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-2-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      2-2 Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-gitlab-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 GitLab Labels
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 GitLab Labels">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-issue-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 Issue Board
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 Issue Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#purpose-of-gitlab-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose of GitLab Labels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-inviting-members-to-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 Inviting Members to Project
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-working-on-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 Working on Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6 Working on Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-milestones" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 Milestones
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7 Milestones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-milestones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Milestones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-service-desk" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 Service Desk
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8 Service Desk">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-desk" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Desk
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="gitlab-issues-and-timelines"><strong>Gitlab Issues and Timelines</strong></h1>
+<h2 id="1-overview"><strong>1 Overview</strong></h2>
+<p>GitLab offers visual boards on top of the backlog list of the issues. </p>
+<p><strong>GitLab Issues</strong></p>
+<ul>
+<li>Issues</li>
+<li>Incidents</li>
+</ul>
+<p><strong>Project labels</strong></p>
+<p><strong>Issue board</strong></p>
+<ul>
+<li>Creating boards</li>
+<li>Moving issues between boards</li>
+</ul>
+<p><strong>Project members</strong></p>
+<p><strong>Milestones</strong></p>
+<h2 id="2-gitlab-issues"><strong>2 GitLab Issues</strong></h2>
+<h3 id="2-1-features-of-gitlab-issues"><strong>2-1 Features of GitLab Issues</strong></h3>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_1.png" title="Body image" /></p>
+<p>The <strong>issues on GitLab are created per project</strong>, so each project has its own dedicated space for the <strong>issues and incident management</strong>. In other systems, you might call them <strong>tasks or tickets</strong>, such as in Jira.</p>
+<p><strong>The incidents are provided on top of the issue management system with a few extra details.</strong> </p>
+<p>Another aspect of the issues is that they enable teams to <strong>collaborate and discuss on the features and bugs in the project</strong>.</p>
+<p>Everything that happens in an issue ticket is maintained <strong>as a timeline based on the date and the time of the activitv.</strong> You can fetch this activity from GitLab using RSS feed as needed, or you can integrate with the GitLab API or other third-party solutions that provide nice features, such as Jira for ticket</p>
+<p>When we create an issue in GitLab instance, <strong>we can specify the title, labels, and basic information to explain the main feature</strong> or requirements for the ticket. </p>
+<p>Once created, or when we are creating, we can always include collaborators.</p>
+<p>GitLab also enables organizations to provide the list of owners who can review each contribution for a feature last but a very important feature. <strong>Being that every issue can be added to a milestone that helps track the work</strong></p>
+<h3 id="2-2-demo"><strong>2-2 Demo</strong></h3>
+<p>Create an issue</p>
+<ul>
+<li>Provide title</li>
+<li>Describe the issue</li>
+<li>Assign to yourself</li>
+</ul>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_2.png" title="Body image" /></p>
+<p>You can import issues from Jira by enabling the integration between Jira and GitLab. <strong>GitLab helps you receive issues and incidents by email</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_3.png" title="Body image" /></p>
+<h2 id="3-gitlab-labels"><strong>3 GitLab Labels</strong></h2>
+<p>GitLab provides an interesting feature called <strong>labels</strong>, which are a nice way to categorize the content within your projects.</p>
+<p>The Git Lab labels are used to create a nice scope around your content.</p>
+<p>For example, they're a nice way to categorize your issues, such as the front-end issues or the back-end issues or the issues for the infrastructure teams to look into. </p>
+<p>And GitLab uses the labels to create the columns for your issue boards in the projects as well. </p>
+<h3 id="demo">Demo</h3>
+<p>In this demonstration, we will create the labels in a GitLab project. We will learn how to create the default labels for a project that GitLab provides. </p>
+<p>You see a button to <strong>create a new label and also a button to generate default labels</strong>.</p>
+<h2 id="4-issue-board"><strong>4 Issue Board</strong></h2>
+<p>Let's learn about the issue boards that GitLab offers. The issue boards are a nice feature of GitLab that offers teams with the capabilities to manage the projects.</p>
+<h3 id="purpose-of-gitlab-labels"><strong>Purpose of GitLab Labels</strong></h3>
+<ul>
+<li>
+<p><strong>Scope</strong></p>
+<ul>
+<li>Define scoped areas of focus within your GitLab organization</li>
+</ul>
+</li>
+<li>
+<p><strong>Categorization</strong></p>
+<ul>
+<li>Group together similar issues for a better management</li>
+</ul>
+</li>
+<li>
+<p><strong>Issue boards</strong></p>
+<ul>
+<li>Define the columns where the issues reside in Issue board.</li>
+</ul>
+</li>
+</ul>
+<p>Think of kanban boards, for example. The boards are powered by the labels and your issues, and <strong>the issues move from one column in the swim lane to another based on the changes in the labels</strong>.</p>
+<p>The boards also help with the <strong>milestones and timeline</strong> </p>
+<p>The boards can be created for each team separately so everyone can work on their own tasks,</p>
+<h3 id="demo_1">Demo</h3>
+<ul>
+<li>Exploring the board</li>
+<li>Moving the issues</li>
+</ul>
+<p>In this demonstration, we will learn about the boards, how to access the board. and some areas around it. We will also learn how to move the issues between the columns on a board.</p>
+<p><strong>By default, GitLab takes you to the backlog page where you can see the list</strong> of the <strong>active and open issues available in the project</strong>.</p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_4.png" title="Body image" /></p>
+<p><strong>Edit Board</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_5.png" title="Body image" /></p>
+<blockquote>
+<p>Add labels to list of board</p>
+</blockquote>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_6.png" title="Body image" /></p>
+<h2 id="5-inviting-members-to-project"><strong>5 Inviting Members to Project</strong></h2>
+<p>Let's learn how to invite members to our projects. we will learn how to invite new members to our project using <strong>their email addresses or their usernames on GitLab</strong>.</p>
+<p>We will also learn <strong>how do we define the roles for the users</strong> that we invite to the projects. Open the project and select the <strong>Members menu</strong> </p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_7.png" title="Body image" /></p>
+<p>We can invite a member to the group using the <strong>Invite members button</strong> </p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_8.png" title="Body image" /></p>
+<h2 id="6-working-on-issues"><strong>6 Working on Issues</strong></h2>
+<p>Now, let's learn how to work on the issues with our teams in a collaborative manner. </p>
+<h3 id="demo_2">Demo</h3>
+<p>In this demonstration, we will learn how to change the assignees on the issues. </p>
+<ul>
+<li>We will also learn how to update the labels on the issue. </li>
+<li>Then, we will learn how to leave comments on the issues, such as our feedback, questions, or suggestions,</li>
+</ul>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_9.png" title="Body image" /></p>
+<h2 id="7-milestones"><strong>7 Milestones</strong></h2>
+<p>Milestones are a great way of tracking the work and keeping timelines active in a project. </p>
+<p>The milestones are a part of the team planning as they work on the features of the project.</p>
+<p><strong>Milestones, however, do not contain everything that a project needs worked on.</strong>  Each milestone aims to collect a <strong>set of the issues and focus on them only</strong>.</p>
+<p><strong>Milestones can be labeled as the quarterly releases</strong> or the version number that is being aimed for.</p>
+<h3 id="using-milestones"><strong>Using Milestones</strong></h3>
+<ul>
+<li><strong>Team Planning</strong>: Work closely with stakeholders for business planning</li>
+<li><strong>Prioritize Work</strong>: Focus on the issues and tickets for upcoming milestones</li>
+<li><strong>Create Releases</strong>:  Publish releases for the milestones and work done</li>
+</ul>
+<p>Once your milestone is complete, everything from that milestone <strong>can be built,validated, packaged, and shipped to market for your customers to use</strong>.</p>
+<h3 id="demo_3">Demo</h3>
+<p>In this demonstration, we will create a milestone and see what GitLab offers.</p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_10.png" title="Body image" /></p>
+<p>The Milestone page on GitLab offers an interesting insight in how the project is being developed. <strong>It shows Upcoming because this milestone has not yet begun</strong>.</p>
+<p>At the time of this recording, the milestone was still a few days behind the start date. <strong>It shows the percentage of the completion based on the issues in the milestone</strong>.</p>
+<p>It also shows how many issues this milestone has and how many of them are open or closed. we have the merge requests for this milestone and if there were any <strong>releases created with this milestone</strong>.</p>
+<p>The main canvas for the milestone shows the charts that are useful to see how the team works. </p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_11.png" title="Body image" /></p>
+<p>In the below, It shows how many issues are open and how much work has been done.</p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_12.png" title="Body image" /></p>
+<p>You have a list of the participating issues and any merge requests.</p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_13.png" title="Body image" /></p>
+<p><strong>This helps identify and categorize the issues based on their milestone,</strong> and you can easily filter the issues for a specific milestone. </p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_14.png" title="Body image" /></p>
+<h2 id="8-service-desk"><strong>8 Service Desk</strong></h2>
+<p>Let's explore how to engage our customers. The Service Desk is a nice feature of GitLab that offers organizations to <strong>use an email address where customers can send</strong> their issues and complaints for your project. </p>
+<p>This feature does not require integrations or configurations on your or your customers part as this is just an email address, but it is always better to avoid being spammed on this address so proceed with caution and do not publish it outside without unnecessary need.</p>
+<p>GitLab would collect and centralize all the incidents and issues in a single place for your project.</p>
+<h3 id="service-desk"><strong>Service Desk</strong></h3>
+<ul>
+<li><strong>Customer Service:</strong>  GitLab enables businesses to capture feedback continuously</li>
+<li><strong>No Integrations:</strong>   Service Desk uses email messages, thus no integration is required</li>
+<li><strong>Centralize:</strong>   Bring the feedback closer to the teams, with issues and incidents</li>
+</ul>
+<p>We will send an email to the address and also assign someone to the work.</p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_15.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_16.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_17.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap0_4_18.png" title="Body image" /></p>
+<p>If you submit any changes to this issue, the email address would receive a notification automatically so <strong>you do not need to reach out to the person via email directly</strong>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-9999 Jacob Xi
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

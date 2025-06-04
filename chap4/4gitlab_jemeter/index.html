@@ -1,0 +1,2701 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Jacob's Gitlab Tutorial Book">
+      
+      
+        <meta name="author" content="Jacob Xi">
+      
+      
+        <link rel="canonical" href="https://chao-xi.github.io/jxgitlabbook/chap4/4gitlab_jemeter/">
+      
+      
+        <link rel="prev" href="../3gitlab_artifact_docker/">
+      
+      
+        <link rel="next" href="../5gitlba_mon/">
+      
+      
+      <link rel="icon" href="../../images/logo.jpeg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>4 Gitlab 自动化测试集成 - Jacob GitLab Book</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-gitlab" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Jacob GitLab Book" class="md-header__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jacob GitLab Book
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              4 Gitlab 自动化测试集成
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Jacob GitLab Book" class="md-nav__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    Jacob GitLab Book
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Welcome
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GitLab Fundamentals
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GitLab Fundamentals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/1proj/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project and Repositoires
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/4issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Issues and Timelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 简介
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab 简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/1gitlab_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 Gitlab 基本介绍（CI/CD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/2gitlab_branch_strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/3gitlab_install_quick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 安装配置Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/4gitlab_install_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 在Kubernetes上安装Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Runner配置&安装
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab Runner配置&安装
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/1gitruner_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 GitLab Runner 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/2gitrunner_install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 GitLab Runner安装注册配置管理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pipeline 核心语法
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Pipeline 核心语法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/1gitlab_pip1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLabCI系列之流水线语法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/2gitlab_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab CI 流水线构建优化 + Runner构建优化（持久化）
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/3gitlab_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 配置复杂的 Gitlab CI/CD Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab工具链集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab工具链集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1git_template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 模板库设计Maven+NPM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2git_sonar_pr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab 工具链集成-代码质量平台集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3gitlab_artifact_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 工具链集成-制品库集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab 自动化测试集成
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab 自动化测试集成
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-ci-" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 CI工具链集成-自动化测试
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1 CI工具链集成-自动化测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      接口测试
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jmeter" class="md-nav__link">
+    <span class="md-ellipsis">
+      jmeter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jmeter_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Jmeter接口测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ant-jmeter" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 Ant + Jmeter自动化测试
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 Ant + Jmeter自动化测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      自动化测试集成
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 上下游项目触发自动化测试
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5gitlba_mon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitLabCI/CD Prom构建数据采集与监控
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab + Kubernetes集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab + Kubernetes集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/1gitlab-runner-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 基于K8S安装部署Runner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/2gitlab_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Kubernetes 容器流水线
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/3gitlab_notification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 Kubernetes 流水线构建消息通知
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/4gitlab_distri_storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab + minio 配置使用分布式缓存
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab流水线最佳实践
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab流水线最佳实践
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/1pip_init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 流水线设计及提交
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/2pip_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 提交流水线设计
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/3pip_run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 流水线运行
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/4pip_secret/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 如何将Secrets扫描加入到GitLab Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    项目交付流水线
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            项目交付流水线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/1deploy_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 项目交付流水线优化后模板库配置
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/2deploy_projs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 项目流水线(JAVA+NPM+安卓)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Certified CICD
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Certified CICD
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/1cer_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLab Certified CI/CD Specialist Training
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/2pip_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anatomy of a Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/3Gitlab_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline 复习
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/4Final_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 认证考题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Project Management
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Project Management
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/1Gitlab_branch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L1 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/2gitlab_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L2 Gitflow Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/3Gitlab_branch_action/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L3 Gitlab branch Settup Action
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ArgoCD Project
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            ArgoCD Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/0gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0 GitOps 常用工具盘点
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/1argo2023_gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 使用 Argo CD 进行 GitOps 流水线改造- 2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/2Argo_Rollouts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 使用 Argo Rollouts 实现应用渐进式发布
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/3argo_dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 DevOps中的Argo CD — 灾难恢复
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/4argo_rollouts_ab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/6gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitOps 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/7k8s_yaml_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6 K8S YAML 资源清单管理方案
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/8cd_image_updater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7 ArgoCD Image Updater
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Github Action
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Github Action
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/1action_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    基于GitHubActions同步Docker镜像实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/2action_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Action - CI/CD Pipeline with Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/3action_events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Actions basic learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-ci-" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 CI工具链集成-自动化测试
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1 CI工具链集成-自动化测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      接口测试
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jmeter" class="md-nav__link">
+    <span class="md-ellipsis">
+      jmeter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jmeter_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Jmeter接口测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ant-jmeter" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 Ant + Jmeter自动化测试
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 Ant + Jmeter自动化测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      自动化测试集成
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 上下游项目触发自动化测试
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="4-gitlab"><strong>4 Gitlab 自动化测试集成</strong></h1>
+<h2 id="1-ci-"><strong>1 CI工具链集成-自动化测试</strong></h2>
+<ul>
+<li>Jmeter接口测试简介</li>
+<li>GitlabCI集成自动化测试</li>
+</ul>
+<blockquote>
+<p>接口测试简介</p>
+</blockquote>
+<ul>
+<li>jmeter运行接口测试</li>
+<li>ant + jmetert批量接口测试</li>
+<li>集成CI自动化测试</li>
+<li>展示测试报告</li>
+</ul>
+<h3 id="_1"><strong>接口测试</strong></h3>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_1.png" title="Body image" /></p>
+<p><strong>接口</strong></p>
+<ul>
+<li>接口测试定义为一种软件测试类型，用于验证两个不同软件系统之问的通信是否正确完成</li>
+<li>集成两个组件的连接称为接口。<strong>计算机世界中的此接口可以是API，Web服务等之类的东西。这些连接服务或接口的测试称为接口测试</strong></li>
+<li><strong>接口实际上是由一组命令，消息和其他允许设备与用户之问进行通信的属性组成的软件</strong>。</li>
+</ul>
+<h3 id="jmeter">jmeter</h3>
+<ul>
+<li>wget</li>
+<li>tar zxf</li>
+<li>export</li>
+<li>source</li>
+</ul>
+<h3 id="jmeter_1"><strong>Jmeter接口测试</strong></h3>
+<pre><code># jmeter
+=============================================
+Don't use GUI mode for load testing !, only for Test creation and Test debugging.
+For load testing, use CLI Mode (was NON GUI):
+jmeter -n -t Ljmx file] -1 [results file] -e -o [Path to web report folder]
+&amp; increase Java Heap to meet your test requirements:
+Modify current env variable HEAP=&quot;-Xms1g
+-Xmx1g -XX:MaxMetaspaceSize=256m&quot; in the jmeter batch file
+Check: https://jmeter.apache.org/usermanual/best-practices.html
+=============================================
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_2.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_3.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_4.png" title="Body image" /></p>
+<p><strong>GUI模式运行测试用例</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_5.png" title="Body image" /></p>
+<p><strong>非GUI模式运行测试用例</strong></p>
+<p>参数说明：</p>
+<ul>
+<li><code>-n</code>：非GUI模式执行JMeter</li>
+<li><code>-t</code>：执行测试文件所在的位置</li>
+<li><code>-l</code>: 指定生成测试结果的保存文件，jtl文件格式</li>
+<li><code>-e</code>：测试结束后，生成测试报告</li>
+<li><code>-o</code>：指定测试报告的存放位置</li>
+</ul>
+<pre><code>Error in NonGUIDriver
+java. lang. IllegalArgumentException:
+Report generation requires csv output
+format, check
+`jmeter. save. saveservice. output.format` property
+</code></pre>
+<pre><code>jmeter -n -t scripts/blog.jmx -l report.jtl -e -o report -J jmeter.save.saveservice.output_format=csv
+</code></pre>
+<p><strong>Example</strong>   <a href="https://github.com/zeyangli/gitlabci-cidevops-interfacetest-service">gitlabci-cidevops-interfacetest-service</a></p>
+<pre><code>$ tree gitlabci-cidevops-interfacetest-service
+gitlabci-cidevops-interfacetest-service
+├── README.md
+├── build.xml
+├── jmeter-results-detail-report_21.xsl
+├── jmeter.results.shanhe.me.xsl
+├── result
+└── scripts
+    └── testbaidu.jmx
+
+2 directories, 5 files
+</code></pre>
+<pre><code> jmeter -n -t testbaidu. jmx -l report.jtl -e -o report -Jjmeter.save.saveservice.output_format=csv
+
+Creating summariser &lt;summary&gt;
+Created the tree successfully using testbaidu.jmx
+Starting the test @ Sat May 09 15:08:34 CST 2020 (1589008114686)
+Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDumpmessage on port 4445
+
+Started: 2 Finished: 0
+
+Started: 2 Finished: 2
+Tidying up... @ Sat May 09 15:08:35 CST 2020 (1589008115639)
+... end of run
+</code></pre>
+<h2 id="2-ant-jmeter"><strong>2 Ant + Jmeter自动化测试</strong></h2>
+<p><strong><code>Build. xmI</code>解析</strong></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf8&quot;?&gt;
+&lt;!-- 拷贝报告所需的图片资源至目标目录 --&gt;
+&lt;project name=&quot;ant-jmeter-test&quot; default=&quot;run&quot; basedir=&quot;.&quot;&gt;
+    &lt;tstamp&gt;
+        &lt;format property=&quot;time&quot; pattern=&quot;yyyyMMddHHmm&quot; /&gt;
+    &lt;/tstamp&gt;
+    &lt;!-- 需要改成自己本地的jmeter目录--&gt;  
+    &lt;property name=&quot;jmeter.home&quot; value=&quot;/usr/local/apache-jmeter-5.1.1&quot; /&gt;
+    &lt;!-- jmeter生成的jtl格式的结果报告的路径--&gt; 
+    &lt;property name=&quot;jmeter.result.jtl.dir&quot; value=&quot;./result/jtlfile&quot; /&gt;
+    &lt;!-- jmeter生成的html格式的结果报告的路径--&gt;
+    &lt;property name=&quot;jmeter.result.html.dir&quot; value=&quot;./result/htmlfile&quot; /&gt;
+    &lt;!-- ʺ生成的报告的前缀--&gt;  
+    &lt;property name=&quot;ReportName&quot; value=&quot;TestReport_&quot; /&gt;
+    &lt;property name=&quot;jmeter.result.jtlName&quot; value=&quot;${jmeter.result.jtl.dir}/${ReportName}${time}.jtl&quot; /&gt;
+    &lt;property name=&quot;jmeter.result.htmlName&quot; value=&quot;${jmeter.result.html.dir}/SummaryReport.html&quot; /&gt;
+    &lt;property name=&quot;jmeter.detail.result.jtlName&quot; value=&quot;${jmeter.result.jtl.dir}/${ReportName}${time}.jtl&quot; /&gt;
+    &lt;property name=&quot;jmeter.detail.result.htmlName&quot; value=&quot;${jmeter.result.html.dir}/DetailReport.html&quot; /&gt;
+    &lt;target name=&quot;run&quot;&gt;
+        &lt;antcall target=&quot;test&quot; /&gt;
+        &lt;antcall target=&quot;report&quot; /&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;test&quot;&gt;
+        &lt;taskdef name=&quot;jmeter&quot; classname=&quot;org.programmerplanet.ant.taskdefs.jmeter.JMeterTask&quot; /&gt;
+        &lt;jmeter jmeterhome=&quot;${jmeter.home}&quot; resultlog=&quot;${jmeter.result.jtlName}&quot;&gt;
+             &lt;!-- 声明要运行的脚本“*.jmx”指包含此目录下的所有jmeter脚本--&gt;
+            &lt;testplans dir=&quot;./scripts&quot; includes=&quot;*.jmx&quot; /&gt;
+           &lt;property name=&quot;jmeter.save.saveservice.output_format&quot; value=&quot;xml&quot;/&gt;
+
+        &lt;/jmeter&gt;
+    &lt;/target&gt;
+    &lt;path id=&quot;xslt.classpath&quot;&gt;
+            &lt;fileset dir=&quot;${jmeter.home}/lib&quot; includes=&quot;xalan*.jar&quot;/&gt;
+            &lt;fileset dir=&quot;${jmeter.home}/lib&quot; includes=&quot;serializer*.jar&quot;/&gt;
+    &lt;/path&gt;
+
+    &lt;target name=&quot;report&quot;&gt;
+        &lt;tstamp&gt; 
+                &lt;format property=&quot;report.datestamp&quot; pattern=&quot;yyyy/MM/dd HH:mm&quot; /&gt;
+        &lt;/tstamp&gt;
+        &lt;xslt 
+            classpathref=&quot;xslt.classpath&quot;
+            force=&quot;true&quot;
+            in=&quot;${jmeter.detail.result.jtlName}&quot;
+            out=&quot;${jmeter.detail.result.htmlName}&quot;
+            style=&quot;./jmeter.results.shanhe.me.xsl&quot;&gt;
+            &lt;param name=&quot;dateReport&quot; expression=&quot;${report.datestamp}&quot;/&gt;
+        &lt;/xslt&gt;
+        &lt;xslt 
+            classpathref=&quot;xslt.classpath&quot;
+            force=&quot;true&quot;
+            in=&quot;${jmeter.result.jtlName}&quot;
+            out=&quot;${jmeter.result.htmlName}&quot;
+            style=&quot;./jmeter-results-detail-report_21.xsl&quot;&gt;
+            &lt;param name=&quot;dateReport&quot; expression=&quot;${report.datestamp}&quot;/&gt;
+        &lt;/xslt&gt;
+        &lt;!-- 拷贝报告所需的图片资源至目标目录 --&gt; 
+        &lt;copy todir=&quot;${jmeter.result.html.dir}&quot;&gt;
+            &lt;fileset dir=&quot;${jmeter.home}/extras&quot;&gt;
+                &lt;include name=&quot;collapse.png&quot; /&gt;
+                &lt;include name=&quot;expand.png&quot; /&gt;
+            &lt;/fileset&gt;
+        &lt;/copy&gt;
+    &lt;/target&gt;
+&lt;/project&gt;
+</code></pre>
+<pre><code>ant -v
+
+Apache Ant(M) version 1.9.14 compiled on March 12 2019
+
+
+$ ant-f build.xml
+...
+&lt;h1 id=&quot;toc_0&quot;&gt;&lt;strong&gt;4 Gitlab 自动化测试集成&lt;/strong&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;toc_1&quot;&gt;&lt;strong&gt;1 CI工具链集成-自动化测试&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Jmeter接口测试简介&lt;/li&gt;
+&lt;li&gt;GitlabCI集成自动化测试&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;接口测试简介&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;jmeter运行接口测试&lt;/li&gt;
+&lt;li&gt;ant + jmetert批量接口测试&lt;/li&gt;
+&lt;li&gt;集成CI自动化测试&lt;/li&gt;
+&lt;li&gt;展示测试报告&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;toc_2&quot;&gt;&lt;strong&gt;接口测试&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/chap4_4_1.png&quot; alt=&quot;Alt Image Text&quot; title=&quot;Body image&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;接口&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;接口测试定义为一种软件测试类型，用于验证两个不同软件系统之问的通信是否正确完成&lt;/li&gt;
+&lt;li&gt;集成两个组件的连接称为接口。&lt;strong&gt;计算机世界中的此接口可以是API，Web服务等之类的东西。这些连接服务或接口的测试称为接口测试&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;接口实际上是由一组命令，消息和其他允许设备与用户之问进行通信的属性组成的软件&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;toc_3&quot;&gt;jmeter&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wget&lt;/li&gt;
+&lt;li&gt;tar zxf&lt;/li&gt;
+&lt;li&gt;export&lt;/li&gt;
+&lt;li&gt;source&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;toc_4&quot;&gt;&lt;strong&gt;Jmeter接口测试&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;# jmeter
+=============================================
+Don&amp;#39;t use GUI mode for load testing !, only for Test creation and Test debugging.
+For load testing, use CLI Mode (was NON GUI):
+jmeter -n -t Ljmx file] -1 [results file] -e -o [Path to web report folder]
+&amp;amp; increase Java Heap to meet your test requirements:
+Modify current env variable HEAP=&amp;quot;-Xms1g
+-Xmx1g -XX:MaxMetaspaceSize=256m&amp;quot; in the jmeter batch file
+Check: https://jmeter.apache.org/usermanual/best-practices.html
+=============================================&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/chap4_4_2.png&quot; alt=&quot;Alt Image Text&quot; title=&quot;Body image&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/chap4_4_3.png&quot; alt=&quot;Alt Image Text&quot; title=&quot;Body image&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/chap4_4_4.png&quot; alt=&quot;Alt Image Text&quot; title=&quot;Body image&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;GUI模式运行测试用例&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/chap4_4_5.png&quot; alt=&quot;Alt Image Text&quot; title=&quot;Body image&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;非GUI模式运行测试用例&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;参数说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-n&lt;/code&gt;：非GUI模式执行JMeter&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t&lt;/code&gt;：执行测试文件所在的位置&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-l&lt;/code&gt;: 指定生成测试结果的保存文件，jtl文件格式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e&lt;/code&gt;：测试结束后，生成测试报告&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o&lt;/code&gt;：指定测试报告的存放位置&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;Error in NonGUIDriver
+java. lang. IllegalArgumentException:
+Report generation requires csv output
+format, check
+`jmeter. save. saveservice. output.format` property&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;jmeter -n -t scripts/blog.jmx -l report.jtl -e -o report -J jmeter.save.saveservice.output_format=csv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Example&lt;/strong&gt;   &lt;a href=&quot;https://github.com/zeyangli/gitlabci-cidevops-interfacetest-service&quot;&gt;gitlabci-cidevops-interfacetest-service&lt;/a&gt;&lt;/p&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;$ tree gitlabci-cidevops-interfacetest-service
+gitlabci-cidevops-interfacetest-service
+├── README.md
+├── build.xml
+├── jmeter-results-detail-report_21.xsl
+├── jmeter.results.shanhe.me.xsl
+├── result
+└── scripts
+    └── testbaidu.jmx
+
+2 directories, 5 files&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt; jmeter -n -t testbaidu. jmx -l report.jtl -e -o report -Jjmeter.save.saveservice.output_format=csv
+
+Creating summariser &amp;lt;summary&amp;gt;
+Created the tree successfully using testbaidu.jmx
+Starting the test @ Sat May 09 15:08:34 CST 2020 (1589008114686)
+Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDumpmessage on port 4445
+
+Started: 2 Finished: 0
+
+Started: 2 Finished: 2
+Tidying up... @ Sat May 09 15:08:35 CST 2020 (1589008115639)
+... end of run&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;toc_5&quot;&gt;&lt;strong&gt;2 Ant + Jmeter自动化测试&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;Build. xmI&lt;/code&gt;解析&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf8&amp;quot;?&amp;gt;
+&amp;lt;!-- 拷贝报告所需的图片资源至目标目录 --&amp;gt;
+&amp;lt;project name=&amp;quot;ant-jmeter-test&amp;quot; default=&amp;quot;run&amp;quot; basedir=&amp;quot;.&amp;quot;&amp;gt;
+    &amp;lt;tstamp&amp;gt;
+        &amp;lt;format property=&amp;quot;time&amp;quot; pattern=&amp;quot;yyyyMMddHHmm&amp;quot; /&amp;gt;
+    &amp;lt;/tstamp&amp;gt;
+    &amp;lt;!-- 需要改成自己本地的jmeter目录--&amp;gt;  
+    &amp;lt;property name=&amp;quot;jmeter.home&amp;quot; value=&amp;quot;/usr/local/apache-jmeter-5.1.1&amp;quot; /&amp;gt;
+    &amp;lt;!-- jmeter生成的jtl格式的结果报告的路径--&amp;gt; 
+    &amp;lt;property name=&amp;quot;jmeter.result.jtl.dir&amp;quot; value=&amp;quot;./result/jtlfile&amp;quot; /&amp;gt;
+    &amp;lt;!-- jmeter生成的html格式的结果报告的路径--&amp;gt;
+    &amp;lt;property name=&amp;quot;jmeter.result.html.dir&amp;quot; value=&amp;quot;./result/htmlfile&amp;quot; /&amp;gt;
+    &amp;lt;!-- ʺ生成的报告的前缀--&amp;gt;  
+    &amp;lt;property name=&amp;quot;ReportName&amp;quot; value=&amp;quot;TestReport_&amp;quot; /&amp;gt;
+    &amp;lt;property name=&amp;quot;jmeter.result.jtlName&amp;quot; value=&amp;quot;${jmeter.result.jtl.dir}/${ReportName}${time}.jtl&amp;quot; /&amp;gt;
+    &amp;lt;property name=&amp;quot;jmeter.result.htmlName&amp;quot; value=&amp;quot;${jmeter.result.html.dir}/SummaryReport.html&amp;quot; /&amp;gt;
+    &amp;lt;property name=&amp;quot;jmeter.detail.result.jtlName&amp;quot; value=&amp;quot;${jmeter.result.jtl.dir}/${ReportName}${time}.jtl&amp;quot; /&amp;gt;
+    &amp;lt;property name=&amp;quot;jmeter.detail.result.htmlName&amp;quot; value=&amp;quot;${jmeter.result.html.dir}/DetailReport.html&amp;quot; /&amp;gt;
+    &amp;lt;target name=&amp;quot;run&amp;quot;&amp;gt;
+        &amp;lt;antcall target=&amp;quot;test&amp;quot; /&amp;gt;
+        &amp;lt;antcall target=&amp;quot;report&amp;quot; /&amp;gt;
+    &amp;lt;/target&amp;gt;
+
+    &amp;lt;target name=&amp;quot;test&amp;quot;&amp;gt;
+        &amp;lt;taskdef name=&amp;quot;jmeter&amp;quot; classname=&amp;quot;org.programmerplanet.ant.taskdefs.jmeter.JMeterTask&amp;quot; /&amp;gt;
+        &amp;lt;jmeter jmeterhome=&amp;quot;${jmeter.home}&amp;quot; resultlog=&amp;quot;${jmeter.result.jtlName}&amp;quot;&amp;gt;
+             &amp;lt;!-- 声明要运行的脚本“*.jmx”指包含此目录下的所有jmeter脚本--&amp;gt;
+            &amp;lt;testplans dir=&amp;quot;./scripts&amp;quot; includes=&amp;quot;*.jmx&amp;quot; /&amp;gt;
+           &amp;lt;property name=&amp;quot;jmeter.save.saveservice.output_format&amp;quot; value=&amp;quot;xml&amp;quot;/&amp;gt;
+
+        &amp;lt;/jmeter&amp;gt;
+    &amp;lt;/target&amp;gt;
+    &amp;lt;path id=&amp;quot;xslt.classpath&amp;quot;&amp;gt;
+            &amp;lt;fileset dir=&amp;quot;${jmeter.home}/lib&amp;quot; includes=&amp;quot;xalan*.jar&amp;quot;/&amp;gt;
+            &amp;lt;fileset dir=&amp;quot;${jmeter.home}/lib&amp;quot; includes=&amp;quot;serializer*.jar&amp;quot;/&amp;gt;
+    &amp;lt;/path&amp;gt;
+
+    &amp;lt;target name=&amp;quot;report&amp;quot;&amp;gt;
+        &amp;lt;tstamp&amp;gt; 
+                &amp;lt;format property=&amp;quot;report.datestamp&amp;quot; pattern=&amp;quot;yyyy/MM/dd HH:mm&amp;quot; /&amp;gt;
+        &amp;lt;/tstamp&amp;gt;
+        &amp;lt;xslt 
+            classpathref=&amp;quot;xslt.classpath&amp;quot;
+            force=&amp;quot;true&amp;quot;
+            in=&amp;quot;${jmeter.detail.result.jtlName}&amp;quot;
+            out=&amp;quot;${jmeter.detail.result.htmlName}&amp;quot;
+            style=&amp;quot;./jmeter.results.shanhe.me.xsl&amp;quot;&amp;gt;
+            &amp;lt;param name=&amp;quot;dateReport&amp;quot; expression=&amp;quot;${report.datestamp}&amp;quot;/&amp;gt;
+        &amp;lt;/xslt&amp;gt;
+        &amp;lt;xslt 
+            classpathref=&amp;quot;xslt.classpath&amp;quot;
+            force=&amp;quot;true&amp;quot;
+            in=&amp;quot;${jmeter.result.jtlName}&amp;quot;
+            out=&amp;quot;${jmeter.result.htmlName}&amp;quot;
+            style=&amp;quot;./jmeter-results-detail-report_21.xsl&amp;quot;&amp;gt;
+            &amp;lt;param name=&amp;quot;dateReport&amp;quot; expression=&amp;quot;${report.datestamp}&amp;quot;/&amp;gt;
+        &amp;lt;/xslt&amp;gt;
+        &amp;lt;!-- 拷贝报告所需的图片资源至目标目录 --&amp;gt; 
+        &amp;lt;copy todir=&amp;quot;${jmeter.result.html.dir}&amp;quot;&amp;gt;
+            &amp;lt;fileset dir=&amp;quot;${jmeter.home}/extras&amp;quot;&amp;gt;
+                &amp;lt;include name=&amp;quot;collapse.png&amp;quot; /&amp;gt;
+                &amp;lt;include name=&amp;quot;expand.png&amp;quot; /&amp;gt;
+            &amp;lt;/fileset&amp;gt;
+        &amp;lt;/copy&amp;gt;
+    &amp;lt;/target&amp;gt;
+&amp;lt;/project&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div&gt;&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;
+</code></pre>
+<p><strong>运行ant测试</strong></p>
+<pre><code>ant -v
+
+Apache Ant(M) version 1.9.14 compiled on March 12 2019
+
+
+$ ant -f build.xml
+...
+BUILD SUCCESSFUL
+Total time: 5 seconds
+</code></pre>
+<p><strong>测试报告</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_6.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_7.png" title="Body image" /></p>
+<p><strong>非GUI模式运行测试用例</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_9.png" title="Body image" /></p>
+<h3 id="_2"><strong>自动化测试集成</strong></h3>
+<p><strong>开启gitlab pages for project <code>gitlabci-cidevops-interfacetest-service</code></strong> </p>
+<p><code>vim /etc/gitlab/gitlab.rb</code></p>
+<pre><code>##! Define to enable GitLab Pages
+pages_external_url = &quot;http://pages.gitlab.com/&quot;
+gitlab_pages['enable' ] = true
+gitlab_pages[ 'inplace_chroot'] = true
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_10.png" title="Body image" /></p>
+<pre><code>gitlab-ctl reconfigure
+</code></pre>
+<p>更新<code>gitlab.ymI</code>文件</p>
+<pre><code>containers:
+  - name: gitlab
+  image: qitlab/qitlab-ce:12.9.0-ce.0
+  imagePullPolicy: IfNotPresent
+  ports:
+    - containerPort: 30088
+        name: web
+        protocol: TCP
+    - containerPort: 22
+        name: agent
+        protocol: TCP
+  - containerPort: 80
+        name: page
+        protocol: TCP
+</code></pre>
+<p><strong>开放80端口</strong></p>
+<pre><code>---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab
+  namespace: devops
+  labels:
+    name: gitlab
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: 32220
+    - name: ssh
+      port: 22
+      targetPort: ssh
+      nodePort: 30022
+    - name: page
+      port: 80
+      targetPort: 80
+      nodePort: 30022
+  type: NodePort
+  selector:
+    name: gitlab
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_11.png" title="Body image" /></p>
+<p><strong><code>.gitlab-ci.yaml</code></strong></p>
+<pre><code>stages:
+  - tests
+  - deploy
+
+interface_test:
+  stage: tests
+  tags:
+    - build
+  script:
+    - ant -Djmeter.home=/usr/local/buildtools/apache-jmeter-5.2.1
+  artifacts:
+    paths:
+      - result/htmlfile/
+
+pages:
+  stage: deploy
+  dependencies:
+    - interface_test
+  script:
+    - mv result/htmlfile/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - master
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_12.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_13.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_14.png" title="Body image" /></p>
+<p><strong>成果展示</strong></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_15.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_16.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_17.png" title="Body image" /></p>
+<h2 id="3"><strong>3 上下游项目触发自动化测试</strong></h2>
+<p><strong><code>gitlabci-templates/jobs/test.yml</code></strong></p>
+<pre><code>#单元测试
+
+.test:
+  stage: test
+  tags:
+    - build
+  script:
+    - $TEST_SHELL
+    - ls 
+  artifacts:
+    reports:
+      junit: ${JUNIT_REPORT_PATH}
+
+.interfacetest:
+    stage: interface_test
+    trigger:
+        project: cidevops/cidevops-interfacetest-service
+        branch: master
+        strategy: depend
+</code></pre>
+<p><strong><code>cidevops-java-service/templates/java-pipeline.yml</code></strong></p>
+<pre><code>nclude:
+  - project: 'cidevops/cidevops-gitlabci-service'
+    ref: master
+    file: 'jobs/build.yml'
+  - project: 'cidevops/cidevops-gitlabci-service'
+    ref: master
+    file: 'jobs/test.yml'
+  - project: 'cidevops/cidevops-gitlabci-service'
+    ref: master
+    file: 'jobs/codeanalysis.yml'
+
+variables:
+  BUILD_SHELL: 'mvn clean package  -DskipTests'  ##构建命令
+  CACHE_DIR: 'target/'
+  TEST_SHELL : 'mvn test'                                   ##测试命令
+  JUNIT_REPORT_PATH: 'target/surefire-reports/TEST-*.xml'   ##单元测试报告
+  # 代码扫描
+  SCANNER_HOME : &quot;/usr/local/buildtools/sonar-scanner-3.2.0.1227-linux&quot;
+  SCAN_DIR : &quot;src&quot;
+  ARTIFACT_PATH : 'target/*.jar'                            ##制品目录
+
+  #上传制品库
+  ARTIFACTORY_URL: &quot;http://192.168.1.200:30082/artifactory&quot;
+  ARTIFACTORY_NAME: &quot;cidevops&quot;
+  TARGET_FILE_PATH: &quot;$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID&quot;
+  TARGET_ARTIFACT_NAME: &quot;$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID.jar&quot;
+
+
+cache:
+  paths:
+    - ${CACHE_DIR}
+
+stages:
+  - build
+  - test
+  - parallel01
+  - down_artifact
+  - interface_test
+
+
+build:
+  stage: build
+  extends: .build
+  rules:
+    - when: on_success
+
+
+test:
+  stage: test
+  extends: .test
+  rules:
+    - when: on_success
+
+
+code_analysis:
+  stage: parallel01
+  extends: .codeanalysis-java
+
+codeanalysis_mr:
+  stage: parallel01
+  extends: .codeanalysis-mr
+
+deploy_artifact:
+  stage: parallel01
+  extends: .deploy-artifact
+
+down_artifact:  
+  stage: down_artifact
+  extends: .down-artifact
+
+interfact_test:
+    stage: interface_test
+    extends: .interfacetest
+</code></pre>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_18.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_19.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_20.png" title="Body image" /></p>
+<p><img alt="Alt Image Text" src="../../images/chap4_4_21.png" title="Body image" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-9999 Jacob Xi
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3026 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Jacob's Gitlab Tutorial Book">
+      
+      
+        <meta name="author" content="Jacob Xi">
+      
+      
+        <link rel="canonical" href="https://chao-xi.github.io/jxgitlabbook/chap8/3Gitlab_pip/">
+      
+      
+        <link rel="prev" href="../2pip_prep1/">
+      
+      
+        <link rel="next" href="../4Final_test/">
+      
+      
+      <link rel="icon" href="../../images/logo.jpeg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Gitlab Pipeline 复习 - Jacob GitLab Book</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gitlab-pipeline" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Jacob GitLab Book" class="md-header__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jacob GitLab Book
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gitlab Pipeline 复习
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Jacob GitLab Book" class="md-nav__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    Jacob GitLab Book
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Welcome
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GitLab Fundamentals
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GitLab Fundamentals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/1proj/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project and Repositoires
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/4issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Issues and Timelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 简介
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab 简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/1gitlab_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 Gitlab 基本介绍（CI/CD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/2gitlab_branch_strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/3gitlab_install_quick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 安装配置Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/4gitlab_install_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 在Kubernetes上安装Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Runner配置&安装
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab Runner配置&安装
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/1gitruner_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 GitLab Runner 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/2gitrunner_install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 GitLab Runner安装注册配置管理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pipeline 核心语法
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Pipeline 核心语法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/1gitlab_pip1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLabCI系列之流水线语法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/2gitlab_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab CI 流水线构建优化 + Runner构建优化（持久化）
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/3gitlab_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 配置复杂的 Gitlab CI/CD Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab工具链集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab工具链集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/1git_template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 模板库设计Maven+NPM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/2git_sonar_pr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab 工具链集成-代码质量平台集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/3gitlab_artifact_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 工具链集成-制品库集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/4gitlab_jemeter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab 自动化测试集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/5gitlba_mon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitLabCI/CD Prom构建数据采集与监控
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab + Kubernetes集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab + Kubernetes集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/1gitlab-runner-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 基于K8S安装部署Runner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/2gitlab_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Kubernetes 容器流水线
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/3gitlab_notification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 Kubernetes 流水线构建消息通知
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/4gitlab_distri_storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab + minio 配置使用分布式缓存
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab流水线最佳实践
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab流水线最佳实践
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/1pip_init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 流水线设计及提交
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/2pip_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 提交流水线设计
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/3pip_run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 流水线运行
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/4pip_secret/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 如何将Secrets扫描加入到GitLab Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    项目交付流水线
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            项目交付流水线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/1deploy_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 项目交付流水线优化后模板库配置
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/2deploy_projs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 项目流水线(JAVA+NPM+安卓)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Certified CICD
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Certified CICD
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1cer_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLab Certified CI/CD Specialist Training
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2pip_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anatomy of a Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline 复习
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline 复习
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    <span class="md-ellipsis">
+      job
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    <span class="md-ellipsis">
+      script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before_script" class="md-nav__link">
+    <span class="md-ellipsis">
+      before_script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after_script" class="md-nav__link">
+    <span class="md-ellipsis">
+      after_script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stages" class="md-nav__link">
+    <span class="md-ellipsis">
+      stages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      . pre &amp; .post
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      stage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tags-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      tags-指定runner
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-" class="md-nav__link">
+    <span class="md-ellipsis">
+      when-控制作业运行
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      timeout 超时
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      parallel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#only-except" class="md-nav__link">
+    <span class="md-ellipsis">
+      only &amp; except (逐步退出）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      rules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules-changes-" class="md-nav__link">
+    <span class="md-ellipsis">
+      rules-changes-文件变化
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflowrules" class="md-nav__link">
+    <span class="md-ellipsis">
+      workflow:rules创建管道
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      cache 关键字
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cache 关键字">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#artifactsdependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      artifacts/dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#needsartifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      needs/artifacts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#includelocal" class="md-nav__link">
+    <span class="md-ellipsis">
+      include/local
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extends-" class="md-nav__link">
+    <span class="md-ellipsis">
+      extends - 继承作业配置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      trigger 管道触发
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      父子管道 类似于 Include
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      services
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      environment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inherit" class="md-nav__link">
+    <span class="md-ellipsis">
+      inherit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4Final_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 认证考题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Project Management
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Project Management
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/1Gitlab_branch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L1 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/2gitlab_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L2 Gitflow Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/3Gitlab_branch_action/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L3 Gitlab branch Settup Action
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ArgoCD Project
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            ArgoCD Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/0gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0 GitOps 常用工具盘点
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/1argo2023_gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 使用 Argo CD 进行 GitOps 流水线改造- 2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/2Argo_Rollouts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 使用 Argo Rollouts 实现应用渐进式发布
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/3argo_dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 DevOps中的Argo CD — 灾难恢复
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/4argo_rollouts_ab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/6gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitOps 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/7k8s_yaml_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6 K8S YAML 资源清单管理方案
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argo1/8cd_image_updater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7 ArgoCD Image Updater
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Github Action
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Github Action
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/1action_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    基于GitHubActions同步Docker镜像实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/2action_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Action - CI/CD Pipeline with Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/3action_events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Actions basic learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    <span class="md-ellipsis">
+      job
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    <span class="md-ellipsis">
+      script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before_script" class="md-nav__link">
+    <span class="md-ellipsis">
+      before_script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after_script" class="md-nav__link">
+    <span class="md-ellipsis">
+      after_script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stages" class="md-nav__link">
+    <span class="md-ellipsis">
+      stages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      . pre &amp; .post
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      stage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tags-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      tags-指定runner
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-" class="md-nav__link">
+    <span class="md-ellipsis">
+      when-控制作业运行
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      timeout 超时
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      parallel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#only-except" class="md-nav__link">
+    <span class="md-ellipsis">
+      only &amp; except (逐步退出）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      rules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules-changes-" class="md-nav__link">
+    <span class="md-ellipsis">
+      rules-changes-文件变化
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflowrules" class="md-nav__link">
+    <span class="md-ellipsis">
+      workflow:rules创建管道
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      cache 关键字
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cache 关键字">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#artifactsdependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      artifacts/dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#needsartifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      needs/artifacts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#includelocal" class="md-nav__link">
+    <span class="md-ellipsis">
+      include/local
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extends-" class="md-nav__link">
+    <span class="md-ellipsis">
+      extends - 继承作业配置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      trigger 管道触发
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      父子管道 类似于 Include
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      services
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      environment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inherit" class="md-nav__link">
+    <span class="md-ellipsis">
+      inherit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="gitlab-pipeline"><strong>Gitlab Pipeline 复习</strong></h1>
+<h3 id="job">job</h3>
+<ul>
+<li>可以定义一个或多个作业(job)。</li>
+<li>每个作业必须具有唯一的名称（不能使用关键字）。</li>
+<li>每个作业是独立执行的。</li>
+<li><strong>每个作业至少要包含一个script</strong>。</li>
+</ul>
+<pre><code>job1:
+  script: &quot;execute-script-for-job1&quot;
+
+job2:
+  script: &quot;execute-script-for-job2&quot;
+</code></pre>
+<h3 id="script"><strong>script</strong></h3>
+<pre><code>script:
+  - uname -a
+  -  bundle exec rspec
+</code></pre>
+<h3 id="before_script"><strong><code>before_script</code></strong></h3>
+<ul>
+<li>用于定义一个命令，该命令在每个作业之前运行。</li>
+<li><strong><code>before_script</code>失败导致整个作业失败，其他作业将不再执行。作业失败不会影响<code>after_script</code>运行</strong>。</li>
+</ul>
+<h3 id="after_script"><strong><code>after_script</code></strong></h3>
+<ul>
+<li>用于定义将在每个作业（包括失败的作业）之后运行的命令。</li>
+<li>这必须是一个数组。</li>
+<li>指定的脚本在新的shell中执行，与任何<code>before_script</code>或script脚本分开。</li>
+</ul>
+<p><strong>可以在全局定义，也可以在job中定义。在job中定义会覆盖全局</strong></p>
+<h3 id="stages"><strong>stages</strong></h3>
+<p>用于定义作业可以使用的阶段，<strong>并且是全局定义的</strong>。同一阶段的作业并行运行，不同阶段按顺序执行。</p>
+<pre><code>stages：
+  - build
+  - test
+  - codescan
+  - deploy
+</code></pre>
+<p><strong>未定义stages: 如果job没有定义stage则默认是test阶段。如果全局未定义stages,则按顺序运行 build,test,deploy。</strong></p>
+<h3 id="pre-post"><strong><code>. pre</code> &amp; <code>.post</code></strong></h3>
+<ul>
+<li><code>.pre</code> 始终是整个管道的第一个运行阶段，</li>
+<li><code>.post</code> 始终是整个管道的最后一个运行阶段。</li>
+</ul>
+<p>用户定义的阶段都在两者之间运行。<code>.pre</code>和<code>.post</code>的顺序无法更改。如果管道仅包含<code>.pre</code>或<code>.post</code>阶段的作业，则不会创建管道。</p>
+<pre><code>codescan:
+  stage: .pre
+  script:
+    - echo &quot;codescan&quot;
+</code></pre>
+<h3 id="stage"><strong>stage</strong></h3>
+<p><strong>可能遇到的问题：阶段并没有并行运行。</strong></p>
+<p>在这里我把这两个阶段在同一个runner运行了，所以需要修改runner每次运行的作业数量。默认是1，改为10.</p>
+<h3 id="variables"><strong>variables</strong></h3>
+<p>定义变量，pipeline变量、job变量、Runner变量。<strong>job变量优先级最大</strong>。</p>
+<h3 id="tags-runner"><strong>tags-指定runner</strong></h3>
+<p>tags可让您使用指定了标签的跑步者来运行作业,此runner具有ruby和postgres标签。</p>
+<pre><code>job:
+  tags:
+    - ruby
+    - postgres
+</code></pre>
+<p><strong><code>allow_failure</code></strong></p>
+<p><code>allow_failure</code> 允许作业失败，默认值为false 。</p>
+<p><strong>启用后，如果作业失败，该作业将在用户界面中显示橙色警告. 但是，管道的逻辑流程将认为作业成功/通过，并且不会被阻塞</strong>。</p>
+<p><strong>假设所有其他作业均成功，则该作业的阶段及其管道将显示相同的橙色警告。但是，关联的提交将被标记为"通过"，而不会发出警告</strong>。</p>
+<pre><code>job1:
+  stage: test
+  script:
+    - execute_script_that_will_fail
+  allow_failure: true
+</code></pre>
+<h3 id="when-"><strong>when-控制作业运行</strong></h3>
+<ul>
+<li><code>on_success</code>前面阶段中的所有作业都成功（或由于标记为<code>allow_failure</code>而被视为成功）时才执行作业。这是默认值。</li>
+<li><code>on_failure</code>当前面阶段出现失败则执行。</li>
+<li><code>always</code> 执行作业，而不管先前阶段的作业状态如何，放到最后执行。总是执行。</li>
+<li><code>on_failure</code> 当前面阶段出现失败时执行。</li>
+<li><code>manual</code> 手动执行作业。</li>
+<li>
+<p><code>delayed</code> 延迟执行作业。</p>
+</li>
+<li>
+<p><strong>manual 手动</strong></p>
+</li>
+</ul>
+<pre><code>codescan:
+  stage: codescan
+  tags:
+    - build
+  script:
+    - echo &quot;codescan&quot;
+  when: on_success
+</code></pre>
+<pre><code>unittest:
+  stage: test
+  script:
+    - echo &quot;run test&quot;  
+  when: delayed
+  start_in: '5'
+</code></pre>
+<ul>
+<li><strong>delayed 延迟</strong></li>
+</ul>
+<p>delayed 延迟一定时间后执行作业</p>
+<ul>
+<li><strong>retry</strong></li>
+</ul>
+<p>配置在失败的情况下重试作业的次数。</p>
+<pre><code>unittest:
+  stage: test
+  retry: 2
+  script:
+</code></pre>
+<p>为了更好地控制retry哪些失败，可以是具有以下键的哈希值： </p>
+<p><strong>max ：最大重试次数 / when ：重试失败的案例.</strong></p>
+<pre><code>always ：在发生任何故障时重试（默认）.
+unknown_failure ：当失败原因未知时。
+script_failure ：脚本失败时重试。
+api_failure ：API失败重试。
+stuck_or_timeout_failure ：作业卡住或超时时。
+runner_system_failure ：运行系统发生故障。
+missing_dependency_failure: 如果依赖丢失。
+runner_unsupported ：Runner不受支持。
+stale_schedule ：无法执行延迟的作业。
+job_execution_timeout ：脚本超出了为作业设置的最大执行时间。
+archived_failure ：作业已存档且无法运行。
+unmet_prerequisites ：作业未能完成先决条件任务。
+scheduler_failure ：调度程序未能将作业分配给运行scheduler_failure。
+data_integrity_failure ：检测到结构完整性问题。
+</code></pre>
+<pre><code>...
+when: delayed
+retry:
+  max: 2
+  when: script_failure
+</code></pre>
+<h3 id="timeout"><strong>timeout 超时</strong></h3>
+<pre><code>test:
+  script: rspec
+  timeout: 3h 30m
+</code></pre>
+<h3 id="parallel">parallel</h3>
+<p><strong>配置要并行运行的作业实例数,此值必须大于或等于2并且小于或等于50。</strong></p>
+<pre><code>parallel: 5
+</code></pre>
+<pre><code>unittest:
+  stage: test
+  tags:
+    - build
+  script:
+    - ech &quot;run test&quot;  
+  when: delayed
+  start_in: '5'
+  allow_failure: true
+  retry:
+    max: 2
+    when: 
+      - script_failure
+</code></pre>
+<h3 id="only-except"><strong>only &amp; except (逐步退出）</strong></h3>
+<p>only和except是两个参数用分支策略来限制jobs构建：</p>
+<ul>
+<li>only<strong>定义哪些分支和标签的git项目将会被job执行</strong>。</li>
+<li>except<strong>定义哪些分支和标签的git项目将不会被job执行</strong></li>
+</ul>
+<pre><code>job:
+  only:
+    - main
+</code></pre>
+<pre><code>job:
+  # use regexp
+  only:
+    - /issue-.*$/
+  # use special keyword
+  except:
+    - branches
+</code></pre>
+<h3 id="rules"><strong>rules</strong></h3>
+<ul>
+<li>rules允许按顺序评估单个规则对象的列表，直到一个匹配并为作业动态提供属性.</li>
+<li>请注意， <strong>rules不能only/except与only/except组合使用</strong>。</li>
+</ul>
+<p><strong>可用的规则条款包括：</strong></p>
+<ul>
+<li>if （类似于only:variables ）</li>
+<li>changes （ only:changes 相同）</li>
+<li>exists</li>
+</ul>
+<p><strong>if</strong></p>
+<ul>
+<li>如果DOMAIN的值匹配，则需要手动运行。</li>
+<li>不匹配<code>on_succes</code>s。</li>
+<li><strong>条件判断从上到下，匹配即停止</strong>。</li>
+<li>多条件匹配可以使用&amp;&amp; ||</li>
+</ul>
+<pre><code>rules:
+  - if: '$DOMAIN == &quot;example.com&quot;'
+     when: manual
+  - when: on_success
+</code></pre>
+<pre><code>rules:
+  - if: '$DOMAIN == &quot;example.com&quot;'
+    when: manual
+  - if: '$DOMAIN == &quot;example.com&quot;'
+    when: delayed
+    start_in: '5'
+  - when: on_success
+</code></pre>
+<h3 id="rules-changes-"><code>rules-changes</code>-文件变化</h3>
+<ul>
+<li>接受文件路径数组。</li>
+<li>如果提交中<code>*file</code>文件发生的变化则为<code>true</code></li>
+</ul>
+<pre><code>rules:
+    - changes:
+      - Dockerfile
+      when: manual
+</code></pre>
+<ul>
+<li><strong><code>rules:exists</code></strong> </li>
+</ul>
+<p>接受文件路径数组。<strong>当仓库中存在指定的文件时操作</strong>。</p>
+<pre><code>rules:
+    - exists:
+      - Dockerfile
+      when: manual 
+    - changes:
+      - Dockerfile
+      when: on_success
+    - if: '$DOMAIN == &quot;example.com&quot;'
+      when: on_success
+    - when: on_success
+</code></pre>
+<ul>
+<li>
+<p><strong>rules-<code>allow_failure</code></strong></p>
+</li>
+<li>
+<p>使用<code>allow_failure: true</code></p>
+</li>
+<li>rules:在不停止管道本身的情况下允许作业失败或手动作业等待操作。</li>
+</ul>
+<pre><code>rules:
+ - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == &quot;main&quot;'
+   when: manual
+   allow_failure: true
+</code></pre>
+<p>在此示例中，如果第一个规则匹配，则作业将具有以下<code>when: manual</code>和<code>allow_failure: true</code>。</p>
+<h3 id="workflowrules"><strong>workflow:rules创建管道</strong></h3>
+<ul>
+<li>顶级workf1ow关键字适用于整个管道，并将确定是否创建管道。</li>
+<li>
+<p>when：可以设置为always或never， 如果未提供，则默认值always。</p>
+</li>
+<li>
+<p>顶级<code>workflow</code>关键字适用于整个管道，并将确定是否创建管道。</p>
+</li>
+<li>when：可以设置为always或never， 如果未提供，则默认值always</li>
+</ul>
+<pre><code>workflow:
+  rules:
+    - if: '$DOMAIN == &quot;example.com&quot;'
+    - when: always
+</code></pre>
+<h2 id="cache"><strong>cache 关键字</strong></h2>
+<p><strong>不要使用缓存在阶段之间传递工件，因为缓存主要是存储编译项目所需的运行时依赖项。</strong></p>
+<p><strong>如果在job范围之外定义了cache ，则意味着它是全局设置，所有job都将使用该定义</strong>。如果未全局定义或未按job定义则禁用该功能。</p>
+<ul>
+<li>存储编译项目所需的运行时依赖项，指定项目工作空间中需要在job之间缓存的文件或目录</li>
+<li>
+<p>全局cache定义在job之外，针对所有job生效。<strong>job中cache优先于全局</strong>。</p>
+</li>
+<li>
+<p><strong><code>cache:paths</code></strong></p>
+</li>
+</ul>
+<p><code>$CI_PROJECT_DIR</code> 项目目录。在job build中定义缓存，将会缓存target目录下的所有<code>.jar</code>文件。</p>
+<pre><code>build:
+  script: test
+  cache:
+    paths:
+      - target/*.jar
+</code></pre>
+<p>当在全局定义了<code>cache:paths</code>会被job中覆盖。以下实例将缓存<code>binaries</code>目录。</p>
+<pre><code>cache:
+  paths:
+    - my/files
+
+build:
+  script: echo &quot;hello&quot;
+  cache:
+    key: build
+    paths:
+      - target/
+</code></pre>
+<p><strong>如何让不同的job缓存不同的cache呢？设置不同的<code>cache:key</code>。</strong></p>
+<ul>
+<li>cache:key 缓存标记</li>
+</ul>
+<p>为缓存做个标记，可以配置job、分支为key来实现分支、作业特定的缓存。</p>
+<p>为不同 job 定义了不同的 <code>cache:key</code> 时， 会为每个 job 分配一个独立的 cache。</p>
+<p><strong>cache:key 变量可以使用任何预定义变量，默认default ，从GitLab 9.0开始，默认情况下所有内容都在管道和作业之间共享</strong>。</p>
+<p><strong>按照分支设置缓存</strong></p>
+<pre><code>cache:
+  key: ${CI_COMMIT_REF_SLUG}
+</code></pre>
+<ul>
+<li><code>cache:key:fles</code> —— 文件变化自动创建缓存</li>
+</ul>
+<p>files：文件发生变化自动重新生成缓存(files最多指定两个文件)，提交的时候检查指定的文件。</p>
+<p><strong>根据指定的文件生成密钥计算SHA校验和，如果文件未改变值为default</strong>。</p>
+<pre><code>cache:
+  key:
+    files:
+      - Gemfile.lock
+      - package.json
+  paths:
+    - vendor/ruby
+    - node_modules
+</code></pre>
+<ul>
+<li><strong><code>cache: key:prefix</code> -组合生成SHA校验和</strong></li>
+</ul>
+<p>prefix: 允许给定prefix的值与指定文件生成的秘钥组合。</p>
+<p>在这里定义了全局的cache，如果文件发生变化则值为 <code>rspec-xxx111111111222222</code> ，未发生变化为rspec-default。</p>
+<pre><code>cache:
+  key:
+    files:
+      - Gemfile.lock
+    prefix: ${CI_JOB_NAME}
+  paths:
+    - vendor/ruby
+</code></pre>
+<p>例如，添加<code>$CI_JOB_NAME prefix</code>将使密钥看起来像：</p>
+<p><strong><code>rspec-feef9576d21ee9b6a32e30c5c79d0a0ceb68d1e5</code></strong></p>
+<ul>
+<li><code>cache:policy</code>策略<ul>
+<li><strong>默认：在执行开始时下载文件，并在结束时重新上传文件。称为<code>pull-push</code>缓存策略</strong></li>
+<li><code>policy: pull</code> 跳过下载步骤</li>
+<li><code>policy: push</code> 跳过上传步骤</li>
+</ul>
+</li>
+</ul>
+<pre><code>rspec:
+  stage: test
+  cache:
+    key: gems
+    paths:
+      - vendor/bundle
+    policy: pull
+  script:
+    - bundle exec rspec ...
+</code></pre>
+<h3 id="artifactsdependencies"><strong>artifacts/dependencies</strong></h3>
+<ul>
+<li><code>artifacts:paths</code></li>
+</ul>
+<pre><code>artifacts:
+  paths:
+    - target/
+</code></pre>
+<ul>
+<li><code>artifacts:expose_as</code> -MR展示制品</li>
+</ul>
+<p>关键字<code>expose_as</code>可用于在合并请求 UI中公开作业工件。</p>
+<pre><code>artifacts:
+    expose_as: 'artifact 1'
+    paths: 
+      - path/to/file.txt
+</code></pre>
+<ul>
+<li><code>artifacts:name</code></li>
+</ul>
+<p>通过name指令定义所创建的工件存档的名称。可以为每个档案使用唯一的名称。</p>
+<p><code>artifacts:name</code>变量可以使用任何预定义变量。默认名称是artifacts，下载artifacts改为artifacts.zip。</p>
+<pre><code>job:
+  artifacts:
+    name: &quot;$CI_JOB_NAME&quot;
+    paths:
+      - binaries/
+</code></pre>
+<p>使用内部分支或标记的名称（仅包括binaries目录）创建存档，</p>
+<pre><code>job:
+  artifacts:
+    name: &quot;$CI_COMMIT_REF_NAME&quot;
+    paths:
+      - binaries/
+</code></pre>
+<p><strong>使用当前作业的名称和当前分支或标记（仅包括二进制文件目录）创建存档</strong></p>
+<p><code>name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"</code></p>
+<ul>
+<li>
+<p><code>artifacts:when</code>  用于在作业失败时或成功而上传工件。</p>
+<ul>
+<li><code>on_success</code> 仅在作业成功时上载工件默认值。</li>
+<li><code>on_failure</code>仅在作业失败时上载工件。</li>
+<li>always 上载工件，无论作业状态如何。</li>
+</ul>
+</li>
+<li>
+<p><code>artifacts: expire_in</code> 制品保留时间,定义过期时间，则默认为30天。</p>
+</li>
+<li><code>artifacts:reports</code>  artifacts:reports:junit —— 单元测试报告</li>
+</ul>
+<pre><code> artifacts:
+    name: &quot;$CI_JOB_NAME-$CI_COMMIT_REF_NAME&quot;
+    when: on_success
+    #expose_as: 'artifact 1'
+    paths:
+      - target/*.jar
+      #- target/surefire-reports/TEST*.xml
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+      cobertura: target/site/cobertura/coverage.xml
+  coverage: '/Code coverage: \d+\.\d+/'
+</code></pre>
+<h3 id="dependencies"><strong>dependencies</strong></h3>
+<p>定义要获取工件的作业列表，只能从当前阶段之前执行的阶段定义作业。定<strong>义一个空数组将跳过下载该作业的任何工件不会考虑先前作业的状态</strong>，因此，如果它失败或是未运行的手动作业，则不会发生错误。</p>
+<pre><code>unittest:
+  dependencies:
+    - build
+</code></pre>
+<h3 id="needsartifacts"><strong>needs/artifacts</strong></h3>
+<ul>
+<li>needs 并行阶段</li>
+</ul>
+<p>可无序执行作业，无需按照阶段顺序运行某些作业，可以让多个阶段同时运行。</p>
+<pre><code>module-a-test:
+  stage: test
+  script: 
+    - echo &quot;hello3a&quot;
+    - sleep 10
+  needs: [&quot;module-a-build&quot;]
+</code></pre>
+<p><strong>制品下载</strong></p>
+<p><strong>在使用needs，可通过<code>artifacts: true</code>或<code>artifacts: false</code>来控制工件下载。默认不指定为true。</strong></p>
+<pre><code> needs: 
+    - job: &quot;module-a-build&quot;
+      artifacts: true
+</code></pre>
+<p>相同项目中的管道制品下载,通过将project关键字设置为当前项目的名称，并指定引用，可以使用needs从当前项目的不同管道中下载工件</p>
+<pre><code>needs:
+  - project: group/same-project-name
+     job: build-1
+     ref: other-ref
+     artifacts: true
+</code></pre>
+<h3 id="includelocal"><strong>include/local</strong></h3>
+<pre><code>include:
+  local: 'ci/localci.yml'
+</code></pre>
+<p><strong>include: local-引入本地配置</strong></p>
+<ul>
+<li>file</li>
+</ul>
+<p>引入 <code>demo/demo-java-service</code>项目 main 分支 .<code>gitlab-ci.yml</code> 配置</p>
+<pre><code>include:
+  - project: demo/demo-java-service
+    ref: main
+    file: '.gitlab-ci.yml'
+</code></pre>
+<ul>
+<li>include: template-引入官方配置</li>
+</ul>
+<pre><code>include:
+  - template: Auto-DevOps.gitlab-ci.yml
+</code></pre>
+<h3 id="extends-"><strong>extends - 继承作业配置</strong></h3>
+<pre><code>testjob:
+  extends: .tests
+</code></pre>
+<h3 id="trigger"><strong>trigger 管道触发</strong></h3>
+<p>当Gitlab从trigger定义创建的作业启动时，将创建一个下游管道。允许创建多项目管道和子管道。将trigger与w<code>hen:manual</code>一起使用会导致错误</p>
+<ul>
+<li>多项目管道：跨多个项目设置流水线，以便一个项目中的管道可以触发另一个项目中的管道。[微服务架构]</li>
+<li>父子管道：在同一项目中管道可以触发一组同时运行的子管道，子管道仍然按照阶段顺序执行其每个作业，但是可以自由地继续执行各个阶段，而不必等待父管道中无关的作业完成。</li>
+</ul>
+<pre><code>staging:
+  variables:
+      ENVIRONMENT: staging
+  stage: deploy
+  trigger:
+      project: gitlab-instance-8f6af96c/demo-java-service
+      branch: main
+      # strategy: depend
+</code></pre>
+<ul>
+<li>project关键字，用于指定下游项目的完整路径。该branch关键字指定由指定的项目分支的名称。</li>
+<li>使用variables关键字将变量传递到下游管道。全局变量也会传递给下游项目。</li>
+<li>上游管道优先于下游管道。如果在上游和下游项目中定义了两个具有相同名称的变量，则在上游项目中定义的变量将优先。</li>
+<li>默认情况下，一旦创建下游管道，trigger作业就会以success状态完成。</li>
+<li>strategy: depend将自身状态从触发的管道合并到源作业。</li>
+</ul>
+<h3 id="include"><strong>父子管道 类似于 Include</strong></h3>
+<p>父子流水线在一个项目中</p>
+<pre><code>staging2:
+  variables:
+    ENVIRONMENT: staging
+  stage: deploy
+  trigger: 
+    include: ci/child01.yml  
+    strategy: depend
+</code></pre>
+<h3 id="services"><strong>services</strong></h3>
+<p>工作期间运行的另一个Docker映像，并link到image关键字定义的Docker映像。这样，您就可以在构建期间访问服务映像.</p>
+<p>服务映像可以运行任何应用程序，但是最常见的用例是运行数据库容器，例如mysql 。与每次安装项目时都安装mysql相比，使用现有映像并将其作为附加容器运行更容易，更快捷</p>
+<pre><code>services:
+  - name: mysql:latest
+    alias: mysql-1
+</code></pre>
+<h3 id="environment"><strong>environment</strong></h3>
+<p>声明所部署的环境名称和访问地址，后续可以直接在gitlab 环境变量中查看。非常方便。</p>
+<pre><code>environment:
+    name: production
+    url: https://prod.example.com
+</code></pre>
+<h3 id="inherit"><strong>inherit</strong></h3>
+<p>使用或禁用全局定义的环境变量（variables）或默认值(default)。</p>
+<p>使用true、false决定是否使用，默认为true</p>
+<pre><code>inherit:
+  default: false
+  variables: false
+</code></pre>
+<p>继承其中的一部分变量或默认值使用list</p>
+<pre><code>inherit:
+  default:
+    - parameter1
+    - parameter2
+  variables:
+    - VARIABLE1
+    - VARIABLE2
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-9999 Jacob Xi
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

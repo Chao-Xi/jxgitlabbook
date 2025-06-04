@@ -1,0 +1,2720 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Jacob's Gitlab Tutorial Book">
+      
+      
+        <meta name="author" content="Jacob Xi">
+      
+      
+        <link rel="canonical" href="https://chao-xi.github.io/jxgitlabbook/argo1/4argo_rollouts_ab/">
+      
+      
+        <link rel="prev" href="../3argo_dr/">
+      
+      
+        <link rel="next" href="../6gitops/">
+      
+      
+      <link rel="icon" href="../../images/logo.jpeg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付 - Jacob GitLab Book</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ab-argo-rollouts" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Jacob GitLab Book" class="md-header__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jacob GitLab Book
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Jacob GitLab Book" class="md-nav__button md-logo" aria-label="Jacob GitLab Book" data-md-component="logo">
+      
+  <img src="../../images/logo.jpeg" alt="logo">
+
+    </a>
+    Jacob GitLab Book
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Chao-Xi/jxgitlabbook.git" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jxgitlabbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Welcome
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    GitLab Fundamentals
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            GitLab Fundamentals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/1proj/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project and Repositoires
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap0/4issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Issues and Timelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 简介
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab 简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/1gitlab_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 Gitlab 基本介绍（CI/CD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/2gitlab_branch_strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/3gitlab_install_quick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 安装配置Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap1/4gitlab_install_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 在Kubernetes上安装Gitlab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Runner配置&安装
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab Runner配置&安装
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/1gitruner_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 GitLab Runner 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap2/2gitrunner_install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 GitLab Runner安装注册配置管理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pipeline 核心语法
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Pipeline 核心语法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/1gitlab_pip1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLabCI系列之流水线语法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/2gitlab_summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab CI 流水线构建优化 + Runner构建优化（持久化）
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap3/3gitlab_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 配置复杂的 Gitlab CI/CD Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab工具链集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab工具链集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/1git_template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 模板库设计Maven+NPM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/2git_sonar_pr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Gitlab 工具链集成-代码质量平台集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/3gitlab_artifact_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 工具链集成-制品库集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/4gitlab_jemeter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab 自动化测试集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap4/5gitlba_mon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitLabCI/CD Prom构建数据采集与监控
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab + Kubernetes集成
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab + Kubernetes集成
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/1gitlab-runner-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 基于K8S安装部署Runner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/2gitlab_k8s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 Kubernetes 容器流水线
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/3gitlab_notification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 Kubernetes 流水线构建消息通知
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap5/4gitlab_distri_storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 Gitlab + minio 配置使用分布式缓存
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Gitlab流水线最佳实践
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Gitlab流水线最佳实践
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/1pip_init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 流水线设计及提交
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/2pip_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 提交流水线设计
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/3pip_run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 流水线运行
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap6/4pip_secret/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 如何将Secrets扫描加入到GitLab Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    项目交付流水线
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            项目交付流水线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/1deploy_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 项目交付流水线优化后模板库配置
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap7/2deploy_projs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 项目流水线(JAVA+NPM+安卓)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Certified CICD
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Certified CICD
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/1cer_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitLab Certified CI/CD Specialist Training
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/2pip_prep1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anatomy of a Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/3Gitlab_pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab Pipeline 复习
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap8/4Final_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gitlab 认证考题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    gitlab Project Management
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            gitlab Project Management
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/1Gitlab_branch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L1 Gitlab branch Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/2gitlab_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L2 Gitflow Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/3Gitlab_branch_action/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L3 Gitlab branch Settup Action
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap9/4gitlab_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    L4 Agile Planning with GitLab
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ArgoCD Project
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            ArgoCD Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0 GitOps 常用工具盘点
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1argo2023_gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1 使用 Argo CD 进行 GitOps 流水线改造- 2024
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2Argo_Rollouts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2 使用 Argo Rollouts 实现应用渐进式发布
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3argo_dr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3 DevOps中的Argo CD — 灾难恢复
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    4 A/B测试: 如何使用Argo Rollouts 进行渐进式交付
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ab-101" class="md-nav__link">
+    <span class="md-ellipsis">
+      A/B 测试 101
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用 A/B 测试的数据驱动渐进式交付
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argo-ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用 Argo 推出实验进行 A/B 测试
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argo-rollouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Argo Rollouts 金丝雀部署
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Argo Rollouts 金丝雀部署">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用案例
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argo-rollouts-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Argo Rollouts Experiment的实施
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argo-rollouts_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      设置 Argo Rollouts 控制器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argo-rollouts_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Argo Rollouts金丝雀部署
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ab_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      A/B 测试在渐进式交付中的好处
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      概括
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5 GitOps 简介
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7k8s_yaml_cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6 K8S YAML 资源清单管理方案
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8cd_image_updater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7 ArgoCD Image Updater
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Github Action
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Github Action
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/1action_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    基于GitHubActions同步Docker镜像实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/2action_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Action - CI/CD Pipeline with Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chap10/3action_events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub Actions basic learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ab-101" class="md-nav__link">
+    <span class="md-ellipsis">
+      A/B 测试 101
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用 A/B 测试的数据驱动渐进式交付
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argo-ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用 Argo 推出实验进行 A/B 测试
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argo-rollouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Argo Rollouts 金丝雀部署
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Argo Rollouts 金丝雀部署">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用案例
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argo-rollouts-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Argo Rollouts Experiment的实施
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argo-rollouts_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      设置 Argo Rollouts 控制器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argo-rollouts_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Argo Rollouts金丝雀部署
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ab_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      A/B 测试在渐进式交付中的好处
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      概括
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="ab-argo-rollouts">A/B测试: 如何使用Argo Rollouts 进行渐进式交付</h1>
+<p>传统上，软件和应用程序如果升级出现任何问题，工程团队无能为力，因为应用程序发布后他们几乎无法控制该应用程序。</p>
+<p>然而，<strong>随着渐进式交付策略的出现</strong>，团队可以更好地控制他们的发布。这使得他们可以更轻松地快速回滚到以前的版本，以防出现问题。</p>
+<p><strong>大多数部署策略（例如 Canary 和 Blue-Green）允许我们快速回滚应用程序版本，同时维护应用程序的不同版本</strong>。</p>
+<p>谈到多个版本，其中一个版本打开了一项功能，另一个版本则关闭了该功能。但是，在将其发布给更大的群体之前，您如何知道哪一个更好呢？</p>
+<p>在这篇博文中，我们将讨论 A/B 测试，它允许您利用数据来帮助您确定哪个版本更好。我们将了解什么是 A/B 测试，了解其在渐进式交付中的作用，并使用一个简单的示例展示 A/B 测试如何与Argo Rollouts配合使用。</p>
+<h2 id="ab-101">A/B 测试 101</h2>
+<p>A/B 测试是一个<strong>对应用程序的两个不同版本进行比较和评估的过程</strong>，以确定哪个版本性能更好。这也称为对比测试。<strong>不同的版本会显示给不同的用户组，并通过收集不同的指标来执行统计分析，以帮助确定哪个版本性能更好</strong>。</p>
+<p>A/B 测试流行的主要原因之一是<strong>它允许团队根据数据而不是他们的意见对其产品进行更改</strong>。团队可以对产品有一个愿景，但是，用户的反馈有助于塑造产品的未来。基于此类反馈，产品可以随着时间的推移而得到改进。</p>
+<p><img alt="Alt Image Text" src="../../images/ag1_4_1.png" title="Body image" /></p>
+<p>这种方法非常流行，用于衡量登陆页面和应用程序的性能。使用 A/B 测试，他们不仅能够做出设计决策，还能了解影响应用程序性能的用户体验。我们中的许多人可能很难相信按钮颜色的简单改变就能使转化率提高 21%。</p>
+<h2 id="ab">使用 A/B 测试的数据驱动渐进式交付</h2>
+<p>在渐进式交付的情况下，您有两个不同的部署，您可以在这两个部署上运行测试，以帮助您确定两个版本中哪个版本更好。在决定继续进行哪一个之前，我们可以对不同版本的应用程序启动多个长时间运行的实验。</p>
+<p>您运行的测试和收集的指标完全取决于您的用例。<strong>您可以对应用程序版本本身运行测试，或使用外部指标来决定最终版本。</strong></p>
+<p><strong>团队通常使用延迟、点击率和跳出率等指标</strong>来选择升级到生产的版本。</p>
+<p>在渐进式交付中使用 A/B 测试不仅可以使您的流程更具弹性和快速，还可以帮助您根据数据确定用户的最佳体验。</p>
+<p>让我们看看如何使用 Argo Rollouts 进行渐进式交付中的 A/B 测试。</p>
+<h2 id="argo-ab">使用 Argo 推出实验进行 A/B 测试</h2>
+<p>Argo Rollouts是一个 Kubernetes 控制器以及一组 CRD，可提供高级部署策略，例如 Canary、Blue Green 和 Experiments 等。</p>
+<p>它创建类似于部署的ReplicaSet 。</p>
+<p>控制器根据rollout 对象中定义的spec.template管理这些 ReplicaSet 的创建和删除。</p>
+<p><strong>Argo Rollouts Experiment 是一个 Kubernetes CRD，它允许我们对应用程序执行 A/B 测试和 Kayenta 式分析</strong>。Experiment由三个组成部分组成。让我们了解一下这些是什么：</p>
+<ul>
+<li>Experiment：<strong>旨在在 ReplicaSet 上运行以进行分析。Experiment可以按照预定的持续时间或无限期地运行直至停止</strong>。如果未指定持续时间，它将无限期地运行，<strong>直到停止或直到所有标记requiredForCompletion的分析完成</strong>。在内部，它还引用 <strong>AnalysisTemplate</strong>。这用于并行创建基线和金丝雀部署，并比较两者生成的指标以决定后续步骤。</li>
+<li>AnalysisTemplate：<strong>此模板定义如何执行分析。它包括频率、持续时间和成功/失败值等详细信息</strong>，用于确定实验是成功还是失败。</li>
+<li>AnalysisRun：这些是根据 AnalysisTemplate 中提供的详细信息运行的作业。它们被分类为成功、失败或不确定，<strong>根据这些来决定Rollout的更新。因此，仅当 AnalysisRun 成功时，部署才会继续</strong>。</li>
+</ul>
+<p><img alt="Alt Image Text" src="../../images/ag1_4_2.png" title="Body image" /></p>
+<p>Experiment可以独立运行、作为部署的一部分或与流量路由一起运行。在这篇文章中，我们将讨论如何使用 Argo Rollouts Experiment进行金丝雀部署。</p>
+<p>以下是 Argo Rollouts Experiment如何与金丝雀推出配合使用：</p>
+<ul>
+<li>副本集被创建，一旦它们达到完全可用性，Experiment就会开始并很快进入运行状态。</li>
+<li>当Experiment运行时，它会根据 AnalysisTemplate 中提供的详细信息启动 AnalysisRun。</li>
+<li>如果指定了持续时间，则Experiment将在完成之前持续运行。</li>
+<li>如果 AnalysisRun 成功，则Experiment成功并且部署将继续，如果失败，则部署不会发生。</li>
+<li>一旦 AnalysisRun 完成并且Experiment结束，ReplicaSets 将缩放为零。</li>
+</ul>
+<h2 id="argo-rollouts">Argo Rollouts 金丝雀部署</h2>
+<p>我们将使用带有金丝雀部署策略的 Argo Rollouts Experiment，并了解Experiment如何帮助我们执行 A/B 测试并自动确定推出进度状态。</p>
+<h3 id="_1">使用案例</h3>
+<p>我们将使用一个天气应用程序。天气应用程序有两个版本，将使用金丝雀部署策略推出。我们将在金丝雀策略中进行一个Experiment。<strong>该Experiment引用了一个 AnalysisTemplate，它基本上从 API 获取响应。根据响应，Experiment将被标记为通过或失败。如果Experiment成功，则将推出应用程序的新版本，否则不会</strong>。</p>
+<p>了解了用例后，让我们进入代码：</p>
+<h3 id="argo-rollouts-experiment">Argo Rollouts Experiment的实施</h3>
+<p>首先，您需要一个 Kubernetes 集群。您可以让它在本地系统或托管云提供商上运行。然后，您可以通过配置终端来访问该集群来连接到该集群。在本例中，我们使用 Minikube。<strong>如果您使用 Minikube，请确保启用 ingress 插件</strong>。</p>
+<p>下一步是克隆包含此示例的存储库：</p>
+<pre><code>git clone https://github.com/infracloudio/ArgoRollouts-ABTesting-WeatherExample.git
+</code></pre>
+<h3 id="argo-rollouts_1">设置 Argo Rollouts 控制器</h3>
+<p>创建一个命名空间以将 Argo Rollouts 控制器安装：</p>
+<pre><code>kubectl create namespace argo-rollouts
+</code></pre>
+<p>安装最新版本的 Argo Rollouts 控制器：</p>
+<pre><code>kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+</code></pre>
+<p>确保用于 argo 部署的所有组件和 Pod 均处于运行状态。您可以通过运行以下命令来检查它：</p>
+<pre><code>kubectl get all -n argo-rollouts
+</code></pre>
+<p>与 Argo Rollouts 控制器交互的最简单且推荐的方法之一是使用<strong><code>kubectl argo rollout</code></strong> 插件。您可以通过执行以下命令来安装它：</p>
+<pre><code>
+curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64
+chmod +x ./kubectl-argo-rollouts-linux-amd64
+sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
+kubectl argo rollouts version
+</code></pre>
+<p>至此，我们已经在 Kubernetes 集群上成功配置了 Argo Rollouts 控制器。</p>
+<h3 id="argo-rollouts_2">Argo Rollouts金丝雀部署</h3>
+<p>如前所述，我们将使用 <code>Argo Rollouts Experiment</code>和 <code>Canary</code> 部署。</p>
+<p>为此，我们将创建一个金丝雀<code>rollout.yaml</code>和一个<code>AnalysisTemplate</code>。
+rollout规格：</p>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+ name: rollout-experiment
+spec:
+ replicas: 2
+ strategy:
+   canary:
+     steps:
+     - setWeight: 20
+     - pause: {duration: 10}
+     # The second step is the experiment which starts a single canary pod
+     - experiment:
+         duration: 5m
+         templates:
+         - name: canary
+           specRef: canary
+         # This experiment performs its own analysis by referencing an AnalysisTemplates
+         # The success or failure of these runs will progress or abort the rollout respectively.
+         analyses:
+         - name: canary-experiment
+           templateName: webmetric
+     - setWeight: 40
+     - pause: {duration: 10}
+     - setWeight: 60
+     - pause: {duration: 10}
+     - setWeight: 80
+     - pause: {duration: 10}
+ revisionHistoryLimit: 2
+ selector:
+   matchLabels:
+     app: rollout-experiment
+ template:
+   metadata:
+     labels:
+       app: rollout-experiment
+   spec:
+     containers:
+     - name: rollouts-demo
+       image: docker.io/atulinfracloud/weathersample:v1
+       imagePullPolicy: Always
+       ports:
+       - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: rollout-weather-svc
+spec:
+ selector:
+   app: rollout-experiment
+ ports:
+   - protocol: &quot;TCP&quot;
+     port: 80
+     targetPort: 5000
+ type: NodePort
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: rollout-ingress
+ annotations:
+   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+    ingressClassName: nginx
+ rules:
+ - http:
+     paths:
+     - path: /
+       pathType: Prefix
+       backend:
+         service:
+           name: rollout-weather-svc
+           port:
+             number: 80
+</code></pre>
+<p>在上面，<code>rollout.yaml</code>我们创建了一个金丝雀策略并提供了一个experiment作为步骤。</p>
+<p><strong>无论结果如何，experiment都计划运行 5 分钟。它创建一个 <code>Canary ReplicaSet</code> 并引用一个 <code>AnalysisTemplate</code> 对象</strong>。</p>
+<p>AnalysisTemplate </p>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+ name: webmetric
+spec:
+ metrics:
+ - name: webmetric
+   successCondition: result.completed == true # Change this value to `result.completed == false` to fail the test
+   provider:
+     web:
+       url: &quot;https://jsonplaceholder.typicode.com/todos/4&quot; # URL returns a JSON object with completed being one of the values, it returns true by default
+       timeoutSeconds: 10
+ ```
+
+ AnalysisTemplate 名称为webmetric。
+
+ 它调用返回 JSON 对象的 API。该对象有多个变量，其中之一是completed. 下面是一个 JSON 对象示例：
+
+ ```
+{
+    &quot;userId&quot;: 1,
+    &quot;id&quot;: 4,
+    &quot;title&quot;: &quot;et porro tempora&quot;,
+    &quot;completed&quot;: true
+  }
+ ```
+
+**该模板指定successConditionas的值为`result.completed == true`。**
+
+**这意味着只有当completed值为true时 AnalysisRun 才会成功**。即，仅当该 AnalysisRun 成功时，更新才会继续进行。
+
+为了便于部署，我们将上面提到的服务和部署合并到一个 YAML 文件中：`rollout.yaml.` 我们将首先部署 `AnalysisTemplate`，然后进行部署。
+
+</code></pre>
+<p>$ kubectl apply -f analysis.yaml
+analysistemplate.argoproj.io/webmetric created</p>
+<pre><code>
+使用以下命令检查创建的 AnalysisTemplate 的状态：
+
+
+</code></pre>
+<p>$ kubectl describe AnalysisTemplate</p>
+<p>Name:         webmetric
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+API Version:  argoproj.io/v1alpha1
+Kind:         AnalysisTemplate
+Metadata:
+  Creation Timestamp:  2022-09-26T07:03:32Z
+  Generation:          1
+  Managed Fields:
+    API Version:  argoproj.io/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .:
+          f:kubectl.kubernetes.io/last-applied-configuration:
+      f:spec:
+        .:
+        f:metrics:
+    Manager:         kubectl-client-side-apply
+    Operation:       Update
+    Time:            2022-09-26T07:03:32Z
+  Resource Version:  8231
+  UID:               43717fbe-8126-4564-87a1-6c45b1d45ba8
+Spec:
+  Metrics:
+    Name:  webmetric
+    Provider:
+      Web:
+        Timeout Seconds:  10
+        URL:              https://jsonplaceholder.typicode.com/todos/1
+    Success Condition:    result.completed == true
+Events:                   <none></p>
+<pre><code>
+部署 AnalysisTemplate 后，让我们使用以下命令部署rollout：
+
+</code></pre>
+<p>kubectl apply -f rollout.yaml</p>
+<p>rollout.argoproj.io/rollout-experiment created
+service/weather-test-app-hyd created
+service/weather-test-app-ny created</p>
+<pre><code>
+您可以通过运行以下命令来验证rollout是否成功：
+
+</code></pre>
+<p>$ kubectl argo rollouts get rollout rollout-experiment</p>
+<p>Name:            rollout-experiment
+Namespace:       default
+Status:          ✔ Healthy
+Strategy:        Canary
+  Step:          9/9
+  SetWeight:     100
+  ActualWeight:  100
+Images:          docker.io/atulinfracloud/weathersample:v1 (stable)
+Replicas:
+  Desired:       2
+  Current:       2
+  Updated:       2
+  Ready:         2
+  Available:     2</p>
+<p>NAME                                           KIND        STATUS     AGE   INFO
+⟳ rollout-experiment                           Rollout     ✔ Healthy  116s<br />
+└──# revision:1                                                           <br />
+   └──⧉ rollout-experiment-9fb48bdbf           ReplicaSet  ✔ Healthy  116s  stable
+      ├──□ rollout-experiment-9fb48bdbf-czvsh  Pod         ✔ Running  116s  ready:1/1
+      └──□ rollout-experiment-9fb48bdbf-qnk2s  Pod         ✔ Running  116s  ready:1/1</p>
+<pre><code>
+</code></pre>
+<p>$ kubectl get all -n argo-rollouts 
+NAME                                READY   STATUS    RESTARTS      AGE
+pod/argo-rollouts-b9bbbc884-mrgkp   1/1     Running   1 (22h ago)   22h</p>
+<p>NAME                            TYPE        CLUSTER-IP        EXTERNAL-IP   PORT(S)    AGE
+service/argo-rollouts-metrics   ClusterIP   192.168.194.247   <none>        8090/TCP   23h</p>
+<p>NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/argo-rollouts   1/1     1            1           23h</p>
+<p>NAME                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/argo-rollouts-b9bbbc884   1         1         1       23h</p>
+<pre><code>
+此时，我们的应用程序正在使用天气应用程序 v1 运行。为了访问该应用程序，您需要执行以下操作：
+
+* 在新的终端中运行`minikube tunnel`；这将创建一个隧道，以便我们可以从本地主机访问入口。
+* 在另一个终端中，公开`rollout-weather-sv`c通过命令 `minikube service rollout-weather-svc --url`
+* 使用您从上述步骤中获得的 URL 访问该应用程序。
+
+![Alt Image Text](../images/ag1_4_3.png &quot;Body image&quot;)
+
+现在让我们使用金丝雀策略将Docker镜像更新为新的Docker镜像。
+
+</code></pre>
+<p>kubectl argo rollouts set image rollout-experiment rollouts-demo=docker.io/atulinfracloud/weathersample:v2</p>
+<pre><code>
+当我们运行此命令时，以下活动将同时启动：
+
+* 金丝雀部署将开始rollout过程。
+* **Experiments将启动并触发提供的 AnalysisTemplate，它将处于模板中指定的running状态 5 分钟**。
+* AnalysisRun 将根据 AnalysisTemplate 启动并运行直至测试结束。
+* AnalysisRun 将成功结束，但Experiments将运行 5 分钟。
+* 5 分钟后，Experiments将成功，部署将继续并部署天气应用程序 v2。
+
+在以下部分中，我们将看到上述每项活动。
+
+Experiments状况
+
+</code></pre>
+<p>$ kubectl get Experiments</p>
+<p>NAME                               STATUS    AGE
+rollout-experiment-c8b88c86c-2-2   Running   9s</p>
+<pre><code>
+AnalysisRun 的状态
+
+</code></pre>
+<p>$ kubectl get AnalysisRun
+NAME                                                 STATUS       AGE
+rollout-experiment-c8b88c86c-2-2-canary-experiment   Successful   16s</p>
+<pre><code>
+让我们描述 AnalysisRun 并查看 AnalysisRun 执行时发生的事件。
+
+</code></pre>
+<p>$ kubectl describe AnalysisRun rollout-experiment-c8b88c86c-2-2-canary-experiment
+Name:         rollout-experiment-c8b88c86c-2-2-canary-experiment
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+API Version:  argoproj.io/v1alpha1
+Kind:         AnalysisRun
+Metadata:
+  Creation Timestamp:  2023-10-20T14:00:16Z
+  Generation:          2
+  Managed Fields:
+    API Version:  argoproj.io/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .:
+          k:{"uid":"4fd270a1-f7aa-4854-a0ed-aa51f07f024e"}:
+      f:spec:
+        .:
+        f:metrics:
+      f:status:
+        .:
+        f:dryRunSummary:
+        f:metricResults:
+        f:phase:
+        f:runSummary:
+          .:
+          f:count:
+          f:successful:
+        f:startedAt:
+    Manager:    rollouts-controller
+    Operation:  Update
+    Time:       2023-10-20T14:00:18Z
+  Owner References:
+    API Version:           argoproj.io/v1alpha1
+    Block Owner Deletion:  true
+    Controller:            true
+    Kind:                  Experiment
+    Name:                  rollout-experiment-c8b88c86c-2-2
+    UID:                   4fd270a1-f7aa-4854-a0ed-aa51f07f024e
+  Resource Version:        63932
+  UID:                     9ac528be-e255-42e7-a045-e1e90373a29f
+Spec:
+  Metrics:
+    Name:  webmetric
+    Provider:
+      Web:
+        Timeout Seconds:  10
+        URL:              https://jsonplaceholder.typicode.com/todos/4
+    Success Condition:    result.completed == true
+Status:
+  Dry Run Summary:
+  Metric Results:
+    Count:  1
+    Measurements:
+      Finished At:  2023-10-20T14:00:18Z
+      Phase:        Successful
+      Started At:   2023-10-20T14:00:16Z
+      Value:        {"completed":true,"id":4,"title":"et porro tempora","userId":1}
+    Name:           webmetric
+    Phase:          Successful
+    Successful:     1
+  Phase:            Successful
+  Run Summary:
+    Count:       1
+    Successful:  1
+  Started At:    2023-10-20T14:00:18Z
+Events:
+  Type    Reason                 Age   From                 Message
+  ----    ------                 ----  ----                 -------
+  Normal  MetricSuccessful       49s   rollouts-controller  Metric 'webmetric' Completed. Result: Successful
+  Normal  AnalysisRunSuccessful  49s   rollouts-controller  Analysis Completed. Result: Successful</p>
+<pre><code>
+现在让我们看看 AnalysisRun 成功后Experiments的状态：
+
+</code></pre>
+<p>$ kubectl describe Experiment rollout-experiment-698fdb45bf-2-2</p>
+<p>...
+Status:
+  Analysis Runs:
+    Analysis Run:  rollout-experiment-698fdb45bf-2-2-canary-experiment
+    Name:          canary-experiment
+    Phase:         Successful
+  Available At:    2022-09-26T07:44:49Z
+  Conditions:
+    Last Transition Time:  2022-09-26T07:44:35Z
+    Last Update Time:      2022-09-26T07:44:49Z
+    Message:               Experiment "rollout-experiment-698fdb45bf-2-2" is running.
+    Reason:                NewReplicaSetAvailable
+    Status:                True
+    Type:                  Progressing
+  Phase:                   Running
+  Template Statuses:
+    Available Replicas:    1
+    Last Transition Time:  2022-09-26T07:44:49Z
+    Name:                  canary
+    Ready Replicas:        1
+    Replicas:              1
+    Status:                Running
+    Updated Replicas:      1
+Events:
+  Type    Reason                 Age   From                 Message
+  ----    ------                 ----  ----                 -------
+  Normal  TemplateProgressing    48s   rollouts-controller  Template 'canary' transitioned from  -&gt; Progressing
+  Normal  ExperimentPending      48s   rollouts-controller  Experiment transitioned from  -&gt; Pending
+  Normal  ScalingReplicaSet      48s   rollouts-controller  Scaled up ReplicaSet rollout-experiment-698fdb45bf-2-2-canary from 0 to 1
+  Normal  TemplateRunning        34s   rollouts-controller  Template 'canary' transitioned from Progressing -&gt; Running
+  Normal  ExperimentRunning      34s   rollouts-controller  Experiment transitioned from Pending -&gt; Running
+  Normal  AnalysisRunPending     34s   rollouts-controller  AnalysisRun 'canary-experiment' transitioned from  -&gt; Pending
+  Normal  AnalysisRunSuccessful  29s   rollouts-controller  AnalysisRun 'canary-experiment' transitioned from  -&gt; Successful</p>
+<pre><code>
+Argo Rollouts 还带有自己的GUI，您可以使用以下命令进行访问：
+
+</code></pre>
+<p>kubectl argo rollouts dashboard</p>
+<pre><code>
+您可以通过浏览器访问`http://localhost:3100`来访问 Argo Rollouts 控制台。如果您在Experiments运行时查看 Argo Rollouts 仪表板，您应该会看到如下内容：
+
+![Alt Image Text](../images/ag1_4_4.png &quot;Body image&quot;)
+
+![Alt Image Text](../images/ag1_4_41.png &quot;Body image&quot;)
+
+Experiments持续时间过后，Experiments将通过，部署将继续进行后续步骤，并最终部署应用程序的较新版本。
+
+![Alt Image Text](../images/ag1_4_5.png &quot;Body image&quot;)
+
+在现实场景中，您运行的测试可以包括来自 Grafana 和Prometheus等监控工具的指标，并且您将能够根据这些值推进部署。
+
+要测试故障场景，请将`analysis.yaml`文件中`successConditionin`更改为`successCondition: result.completed == false`。
+
+
+由于 API 的结果始终为true，这将使 `AnalysisRun` 失败并且Experiments将失败。
+
+由于Experiments失败，部署将不会继续进行后续步骤，并且不会部署较新的版本。
+更改值后，更新docker镜像并注意 AnalysisRun 对象。
+
+
+</code></pre>
+<p>kubectl describe AnalysisRun rollout-experiment-c8b88c86c-2-2-canary-experiment 
+Name:         rollout-experiment-c8b88c86c-2-2-canary-experiment
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+API Version:  argoproj.io/v1alpha1
+Kind:         AnalysisRun
+Metadata:
+  Creation Timestamp:  2023-10-20T14:00:16Z
+  Generation:          2
+  Managed Fields:
+    API Version:  argoproj.io/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .:
+          k:{"uid":"4fd270a1-f7aa-4854-a0ed-aa51f07f024e"}:
+      f:spec:
+        .:
+        f:metrics:
+      f:status:
+        .:
+        f:dryRunSummary:
+        f:metricResults:
+        f:phase:
+        f:runSummary:
+          .:
+          f:count:
+          f:successful:
+        f:startedAt:
+    Manager:    rollouts-controller
+    Operation:  Update
+    Time:       2023-10-20T14:00:18Z
+  Owner References:
+    API Version:           argoproj.io/v1alpha1
+    Block Owner Deletion:  true
+    Controller:            true
+    Kind:                  Experiment
+    Name:                  rollout-experiment-c8b88c86c-2-2
+    UID:                   4fd270a1-f7aa-4854-a0ed-aa51f07f024e
+  Resource Version:        63932
+  UID:                     9ac528be-e255-42e7-a045-e1e90373a29f
+Spec:
+  Metrics:
+    Name:  webmetric
+    Provider:
+      Web:
+        Timeout Seconds:  10
+        URL:              https://jsonplaceholder.typicode.com/todos/4
+    Success Condition:    result.completed == true
+Status:
+  Dry Run Summary:
+  Metric Results:
+    Count:  1
+    Measurements:
+      Finished At:  2023-10-20T14:00:18Z
+      Phase:        Successful
+      Started At:   2023-10-20T14:00:16Z
+      Value:        {"completed":true,"id":4,"title":"et porro tempora","userId":1}
+    Name:           webmetric
+    Phase:          Successful
+    Successful:     1
+  Phase:            Successful
+  Run Summary:
+    Count:       1
+    Successful:  1
+  Started At:    2023-10-20T14:00:18Z
+Events:
+  Type    Reason                 Age    From                 Message
+  ----    ------                 ----   ----                 -------
+  Normal  MetricSuccessful       9m33s  rollouts-controller  Metric 'webmetric' Completed. Result: Successful
+  Normal  AnalysisRunSuccessful  9m33s  rollouts-controller  Analysis Completed. Result: Successful
+```</p>
+<p>这是一个简短的演示，展示了如何使用 Argo Rollouts 进行渐进式交付中的 A/B 测试。这是一个简单的例子，展示了 Argo Rollouts Experiments的 A/B 测试能力。</p>
+<h3 id="ab_1">A/B 测试在渐进式交付中的好处</h3>
+<p>A/B 测试本身有很多好处。然而，通过将其与金丝雀部署一起使用，我们能够更进一步。通过这种方法，我们能够：</p>
+<ul>
+<li>在特定持续时间内或无限期地运行Experiments，直到那时才会进行部署。</li>
+<li>根据我们定义的指标和标准自动推进部署。</li>
+<li>更快的灾难恢复如果Experiments失败，部署将停止。</li>
+</ul>
+<h3 id="_2">概括</h3>
+<p>渐进式交付和 A/B 测试使团队能够执行自定义 A/B 测试并更快地部署应用程序。在这篇博文中，我们了解了如何使用 Argo Rollouts 的Experiments功能通过金丝雀部署执行 A/B 测试。我们了解了 AnalysisTemplates 和 AnalysisRuns 以及它们的输出如何影响推出。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-9999 Jacob Xi
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
